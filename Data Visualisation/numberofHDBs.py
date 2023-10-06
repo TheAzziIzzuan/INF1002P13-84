@@ -8,8 +8,10 @@ pivot = df.pivot_table(index =['bldg_contract_town'],
                        values =['total_dwelling_units'], aggfunc ='sum') 
 
 #plot data frame 
-df = pd.read_csv("project.py\SumDwellingUnit(2013-2023).csv")
-bargraph = df.plot.bar(x='Row Labels')
-# df.head() #file structure
 
+plt.bar(df['bldg_contract_town'], df['total_dwelling_units'])
+plt.xlabel('bldg_contract_town')
+plt.ylabel('total_dwelling_units')
+plt.title('Amount of Units in Each Area in Singapore')
+plt.xticks(rotation='vertical')
 plt.show()
