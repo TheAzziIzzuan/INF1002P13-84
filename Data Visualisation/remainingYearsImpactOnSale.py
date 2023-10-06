@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 
 
-def RemainingYearImpactonSale(room_type):
+def remainingYearImpactonSale(room_type):
     data = pd.read_csv('..\datasets\Resale_Flat_Prices_Jan_2013_to_Sep_2023.csv')
 
     two_room_data = data[data["flat_type"] == room_type].copy()
@@ -29,8 +29,8 @@ def RemainingYearImpactonSale(room_type):
 
 
 # Get Remaining Year Impact on Sale for all type of room
-RemainingYearImpactonSale("2 ROOM")
-RemainingYearImpactonSale("3 ROOM")
-RemainingYearImpactonSale("4 ROOM")
-RemainingYearImpactonSale("5 ROOM")
-RemainingYearImpactonSale("EXECUTIVE")
+remainingYearImpactonSale("2 ROOM")
+remainingYearImpactonSale("3 ROOM")
+remainingYearImpactonSale("4 ROOM")
+remainingYearImpactonSale("5 ROOM")
+remainingYearImpactonSale("EXECUTIVE")
