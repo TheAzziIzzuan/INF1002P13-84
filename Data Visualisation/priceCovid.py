@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt 
 import pandas as pd 
-import numpy as np
+
 
 df = pd.read_csv('datasets\Resale_Flat_Prices_Jan_2013_to_Sep_2023.csv') 
 df.drop(columns= "block", inplace=True)
@@ -23,11 +23,11 @@ df_filtered.reset_index(inplace=True) #reset index
 plt.figure(figsize=(10, 6))  # Adjust the figure size as needed
 
 plt.xticks(range(2018, 2023)) #set number of ticks
-plt.plot(df_filtered['Year'], df_filtered['resale_price'], marker='o', linestyle='-') 
+plt.plot(df_filtered['Year'], df_filtered['resale_price'], marker='X', linestyle='-') 
 
 # Adding labels and title
 plt.xlabel('Year')
-plt.ylabel('Resale Price')
+plt.ylabel('Resale Price[$]')
 plt.title('Resale Price Over the Years')
 
 # Display the plot
