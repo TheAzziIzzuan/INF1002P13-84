@@ -44,6 +44,7 @@ def remainingYearImpactonSale(room_type):
     plt.show()
 
 
+
 # Get Remaining Year Impact on Sale for all type of room
 # remainingYearImpactonSale("2 ROOM")
 # remainingYearImpactonSale("3 ROOM")
