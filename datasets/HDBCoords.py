@@ -1,7 +1,7 @@
 import googlemaps
 import pandas as pd
 
-addresses = pd.read_csv("HDBPropertyInformation.csv")
+addresses = pd.read_csv("datasets\HDBPropertyInformation.csv")
 
 gmaps = googlemaps.Client(key = 'AIzaSyAfPjwRuZlBF0g7Ed8fInVYdAO38UWcnkM')
 addresses['lat'] = None
@@ -18,4 +18,4 @@ for x in range(len(addresses)):
         lat = None
         lng = None
 
-addresses.to_csv('address_coords.csv')
+addresses.to_csv('hdb-property-coords(FULL).csv')
