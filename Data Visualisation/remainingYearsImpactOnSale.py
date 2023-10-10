@@ -1,9 +1,18 @@
 import datetime
+import tkinter
+
 import matplotlib.pyplot as plt
 import pandas as pd
 import tkinter as tk
 from tkinter import ttk
 import customtkinter
+from tkinter import filedialog
+
+
+def df_to_csv(room_data, filename_prefix):
+    filename = f"{filename_prefix}.csv"
+    df = pd.DataFrame(room_data)
+    df.to_csv(filename, index=False)
 
 
 # gets data from csv and split them into individual data
@@ -28,6 +37,9 @@ def remainingYearImpactonSale(room_type):
     plt.xlabel("Age Left")
     plt.ylabel("Resale Price")
     plt.grid(True)
+
+    exportbutton = tkinter.Button(text="Export", command=lambda: df_to_csv(room_data, room_type))
+    exportbutton.pack()
 
     plt.show()
 
