@@ -8,4 +8,4 @@ fig = px.scatter_mapbox(sgdata, lat="Latitude", lon="Longitude", hover_name="Add
 fig.update_layout(mapbox_style="open-street-map")
 fig.update_geos(resolution=50, fitbounds="locations")
 fig.show()
-# fig.write_html("scatter_map.html")
+# fig.write_html("scatter_map.html") 
