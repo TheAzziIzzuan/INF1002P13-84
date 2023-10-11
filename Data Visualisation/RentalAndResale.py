@@ -64,17 +64,19 @@ canvas = None
 
 def update_canvas(plot_function):
     global canvas
-    # Generate and display the selected plot
-    fig = plot_function()
-    canvas = FigureCanvasTkAgg(fig, master=frame)
-    canvas_widget = canvas.get_tk_widget()
-    canvas_widget.pack(fill='both', expand=True)
-
-def clear_canvas():
-    global canvas  # Use the global canvas variable
     if canvas is not None:
         canvas.get_tk_widget().destroy()
         canvas = None
+        fig = plot_function()
+        canvas = FigureCanvasTkAgg(fig, master=frame)
+        canvas_widget = canvas.get_tk_widget()
+        canvas_widget.pack(fill='both', expand=True)
+    else:
+        # Generate and display the selected plot
+        fig = plot_function()
+        canvas = FigureCanvasTkAgg(fig, master=frame)
+        canvas_widget = canvas.get_tk_widget()
+        canvas_widget.pack(fill='both', expand=True)
 
 #Upper frame showing buttons
 controls_frame = LabelFrame(root, text='List of Graphs', background='light grey', height=5)
@@ -83,8 +85,6 @@ RBFTbutton = Button(controls_frame, text = 'Renting out of Applications by Flat 
 RBFTbutton.pack( side = LEFT)
 RVRAbutton = Button(controls_frame, text = 'Resale vs Rental Applications Registered', command=lambda: update_canvas(ResaleAndRentalApplications))
 RVRAbutton.pack( side = RIGHT )
-clear_button = tk.Button(controls_frame, text="Clear Graph", command=clear_canvas)
-clear_button.pack(side = TOP)
 
 frame.pack(fill='both', expand=True)
 
