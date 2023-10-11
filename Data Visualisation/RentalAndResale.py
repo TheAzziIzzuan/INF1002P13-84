@@ -50,12 +50,42 @@ def ResaleAndRentalApplications():
     
     return fig
 
+def ResalePriceProgression():
+    #read in CSV
+    df = pd.read_csv("datasets\Resale_Flat_Prices_Jan_2013_to_Sep_2023.csv")
+
+    #drop unwanted columns
+    df = df.drop('flat_type', axis=1)
+    df = df.drop('block', axis=1)
+    df = df.drop('street_name', axis=1)
+    df = df.drop('storey_range', axis=1)
+    df = df.drop('floor_area_sqm', axis=1)
+    df = df.drop('flat_model', axis=1)
+    df = df.drop('lease_commence_date', axis=1)
+
+    #converts month to quarter
+    df['month'] = pd.PeriodIndex(df.month, freq='Q')
+    df.set_index('month', inplace=True)
+    df = df.groupby(['month','town'])['resale_price'].mean()
+    df = df.unstack(level='town')
+    df.columns.name = 'Resale Price'
+
+    ax = df.plot()
+    ax.set_xlabel("Years by Quarter")
+    ax.set_ylabel("Resale Price ($)")
+    plt.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='x', alpha=0.7)
+    plt.title("Resale Price Progression of Towns from 2013 to 2023")
+    plt.legend(bbox_to_anchor=(1.05, 1.05), loc='upper left')
+    plt.tight_layout()
+    fig = plt.gcf()
+    return fig
+
 ############################ TKINTER WINDOW SECTION ###############################################
 
 #Initialize window
 root = tk.Tk()
 #Set size of window
-root.geometry("640x480")
+root.geometry("960x720")
 #Title of window
 root.title("Rental and Resale")
 frame = Frame(root)
@@ -80,11 +110,15 @@ def update_canvas(plot_function):
 
 #Upper frame showing buttons
 controls_frame = LabelFrame(root, text='List of Graphs', background='light grey', height=5)
-controls_frame.pack(fill='both', expand='0', side=TOP, padx=20, pady=10)
-RBFTbutton = Button(controls_frame, text = 'Renting out of Applications by Flat Type', command=lambda: update_canvas(RentalbyFlatType))
+
+RBFTbutton = Button(controls_frame, text = 'Renting out of Applications by Flat Type', padx=50, pady=5,command=lambda: update_canvas(RentalbyFlatType))
 RBFTbutton.pack( side = LEFT)
-RVRAbutton = Button(controls_frame, text = 'Resale vs Rental Applications Registered', command=lambda: update_canvas(ResaleAndRentalApplications))
-RVRAbutton.pack( side = RIGHT )
+RVRAbutton = Button(controls_frame, text = 'Resale vs Rental Applications Registered', padx=50, pady=5,command=lambda: update_canvas(ResaleAndRentalApplications))
+RVRAbutton.pack( side = LEFT )
+RPPBTbutton = Button(controls_frame, text = 'Resale Price Progression by Towns', padx=50, pady=5,command=lambda: update_canvas(ResalePriceProgression))
+RPPBTbutton.pack( side = LEFT )
+
+controls_frame.pack(fill='both', expand='0', side=TOP, padx=20, pady=10)
 
 frame.pack(fill='both', expand=True)
 
