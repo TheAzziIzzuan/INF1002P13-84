@@ -1,13 +1,15 @@
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-from tkinter import *
+from tkinter import simpledialog, messagebox, Frame, LabelFrame, Button, LEFT, TOP, RIGHT
 import tkinter as tk
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+import os
 
 ########################### FUNCTIONS TO GENERATE GRAPHS ##################################
 
 def RentalbyFlatType():
+    global df
     #read in CSV
     df = pd.read_csv("datasets\RentalByFlatType.csv")
     #plots figure with 3 rows and 4 columns with figure size of 15x15
@@ -26,6 +28,7 @@ def RentalbyFlatType():
     return fig
 
 def ResaleAndRentalApplications():
+    global df
     #read in CSV
     df = pd.read_csv("datasets\ResaleAndRentalApplications.csv")
 
@@ -51,6 +54,7 @@ def ResaleAndRentalApplications():
     return fig
 
 def ResalePriceProgression():
+    global df
     #read in CSV
     df = pd.read_csv("datasets\Resale_Flat_Prices_Jan_2013_to_Sep_2023.csv")
 
@@ -94,6 +98,7 @@ root.title("Rental and Resale")
 frame = Frame(root)
 
 canvas = None
+df = None
 
 def update_canvas(plot_function):
     global canvas
@@ -111,15 +116,33 @@ def update_canvas(plot_function):
         canvas_widget = canvas.get_tk_widget()
         canvas_widget.pack(fill='both', expand=True)
 
+def df_to_csv(data):
+    df = pd.DataFrame(data)                                                                     # convert to dataframe
+    downloads_folder = os.path.expanduser('~/Downloads')
+    csv_file_path = os.path.join(downloads_folder, 'canvas_data.csv')
+    df.to_csv(csv_file_path, index=False)    
+
+def exportfile():
+    while True:                                                                                 # loop until user enters a filename or no data to export
+        if df is not None:                                                                      # if df is not empty
+            df_to_csv(df)
+            messagebox.showinfo("Export Successful", f"Data exported to CSV file: 'canvas_data.csv'")
+            break
+        else:
+            messagebox.showinfo("Export Unsuccessful!", "No data to export!")
+            break
+
 #Upper frame showing buttons
 controls_frame = LabelFrame(root, text='List of Graphs', background='light grey', height=5)
 
-RBFTbutton = Button(controls_frame, text = 'Renting out of Applications by Flat Type', padx=50, pady=5,command=lambda: update_canvas(RentalbyFlatType))
+RBFTbutton = Button(controls_frame, text = 'Renting out of Applications by Flat Type', padx=10, pady=5,command=lambda: update_canvas(RentalbyFlatType))
 RBFTbutton.pack( side = LEFT)
-RVRAbutton = Button(controls_frame, text = 'Resale vs Rental Applications Registered', padx=50, pady=5,command=lambda: update_canvas(ResaleAndRentalApplications))
+RVRAbutton = Button(controls_frame, text = 'Resale vs Rental Applications Registered', padx=10, pady=5,command=lambda: update_canvas(ResaleAndRentalApplications))
 RVRAbutton.pack( side = LEFT )
-RPPBTbutton = Button(controls_frame, text = 'Resale Price Progression by Towns', padx=50, pady=5,command=lambda: update_canvas(ResalePriceProgression))
+RPPBTbutton = Button(controls_frame, text = 'Resale Price Progression by Towns', padx=10, pady=5,command=lambda: update_canvas(ResalePriceProgression))
 RPPBTbutton.pack( side = LEFT )
+exportbutton = Button(controls_frame, text = 'Export CSV', padx=10, pady=5,command=exportfile)
+exportbutton.pack( side = RIGHT )
 
 controls_frame.pack(fill='both', expand='0', side=TOP, padx=20, pady=10)
 
