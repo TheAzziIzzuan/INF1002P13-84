@@ -1,6 +1,6 @@
 import csv  
  
-with open("dataset\hdb-property-coords.csv", "r") as source: 
+with open("datasets\hdb-property-coords.csv", "r") as source: 
     reader = csv.reader(source) 
       
     with open("output.csv", "w") as result: 
