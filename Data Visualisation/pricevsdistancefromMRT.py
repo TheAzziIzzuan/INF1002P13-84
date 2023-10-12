@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 #data are randomly selected, room size and unit type are the same, remaining years are simlar, just the distance to the mrt is different
-df  = pd.read_csv("project\datasets\sampledata.csv")
+df  = pd.read_csv("datasets\HDBandNearestMrtCoords.csv")
 # df.plot(df['resale_price'], df['nearest_distance_to_mrt'])  # plots all columns against index
 df.plot(kind='scatter',x='nearest_distance_to_mrt',y='resale_price') # scatter plot
 plt.title('Price of 4-room HDBs in relation to distance from MRT (AMK area)')
