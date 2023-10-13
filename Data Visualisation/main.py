@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, LEFT, TOP, RIGHT, Button, LabelFrame
 import matplotlib.pyplot as plt 
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
@@ -7,7 +7,10 @@ import priceCovidTest
 import numberofHDBsTest
 from tkinter import simpledialog
 from tkinter import messagebox
+import os
+import numpy as np
 
+canvas = None
 df = None
 
 def df_to_csv(data, filename_prefix):
@@ -70,8 +73,10 @@ window.title("Resale Price Graph")
 notebook = ttk.Notebook(window) #widget that manages a collection of windows/displays
 tab1 = ttk.Frame(notebook) 
 tab2 = ttk.Frame(notebook)
+tab3 = ttk.Frame(notebook)
 notebook.add(tab1, text="Resale Price before and after COVID-19")
 notebook.add(tab2, text="Other Tab")  
+notebook.add(tab3, text="Rental and Resale")
 notebook.pack(expand=True, fill="both") #fill the entire space of the window
 
 exportButton = tk.Button(tab1, text="Export!", command=exportfile)
@@ -79,6 +84,134 @@ exportButton.pack(side=tk.BOTTOM, pady=15)                                      
 
 button2 = tk.Button(tab2, text="Click Me!", command=displayHDB)
 button2.pack()
+
+############################# TAB 3 GRAPH FUNCTIONS #############################
+
+def RentalbyFlatType():
+    global df
+    #read in CSV
+    df = pd.read_csv("datasets\RentalByFlatType.csv")
+    #plots figure with 3 rows and 4 columns with figure size of 15x15
+    fig, axes = plt.subplots(3, 4, figsize=(15, 15))
+
+    #generates each pie chart
+    for i, (idx, row) in enumerate(df.set_index('year').iterrows()):
+        ax = axes[i // 4, i % 4]
+        row = row[row.gt(row.sum() * .01)]
+        ax.pie(row, autopct='%2.1f%%', labels=row.index, textprops={'fontsize': 8}, startangle=30)
+        ax.set_title(idx)
+
+    fig.subplots_adjust(wspace=.2)
+    fig.delaxes(axes[2,3])
+    plt.suptitle("Number of Approved Renting Out Applications by Flat Type")
+    return fig
+
+def ResaleAndRentalApplications():
+    global df
+    #read in CSV
+    df = pd.read_csv("datasets\ResaleAndRentalApplications.csv")
+
+    #assign values to variables
+    resale = df['resale'].tolist()
+    rental = df['rental'].tolist()
+    year = df['year'].tolist()
+
+    fig, ax = plt.subplots()
+    resaleBars = ax.barh(year, resale,label="Resale")
+    rentalBars = ax.barh(year, rental,label="Rental")
+    plt.bar_label(resaleBars,labels=resale,label_type="center")
+    plt.bar_label(rentalBars,labels=rental,label_type="center")
+
+    #visible grid lines
+    plt.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='x', alpha=0.7)
+    plt.ylabel("Years")
+    plt.xlabel("Applications Registered")
+    plt.title("Applications Registered For Resale and Rental Flats")
+    plt.yticks(year)
+    plt.legend(loc="lower right")
+    
+    return fig
+
+def ResalePriceProgression():
+    global df
+    #read in CSV
+    df = pd.read_csv("datasets\Resale_Flat_Prices_Jan_2013_to_Sep_2023.csv")
+
+    #drop unwanted columns
+    df = df.drop('flat_type', axis=1)
+    df = df.drop('block', axis=1)
+    df = df.drop('street_name', axis=1)
+    df = df.drop('storey_range', axis=1)
+    df = df.drop('floor_area_sqm', axis=1)
+    df = df.drop('flat_model', axis=1)
+    df = df.drop('lease_commence_date', axis=1)
+
+    #converts month to quarter
+    df['month'] = pd.PeriodIndex(df.month, freq='Q')
+    df.set_index('month', inplace=True)
+    df = df.groupby(['month','town'])['resale_price'].mean()
+    df = df.unstack(level='town')
+    df.columns.name = 'Resale Price'
+
+    ax = df.plot()
+    ax.set_xlabel("Years by Quarter")
+    ax.set_ylabel("Resale Price ($)")
+    ax.set_ylim([300000, 1000000])
+    values = np.arange(300000, 1000000, 50000)
+    plt.yticks(values)
+    plt.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='x', alpha=0.7,which='both')
+    plt.title("Average Resale Price Progression of Towns from 2013 to 2023")
+    plt.legend(bbox_to_anchor=(1.05, 1.05), loc='upper left')
+    plt.tight_layout()
+    fig = plt.gcf()
+    return fig
+
+############################# END OF TAB 3 GRAPH FUNCTIONS #############################
+
+
+def update_canvas(plot_function):
+    global canvas
+    if canvas is not None:
+        canvas.get_tk_widget().destroy()
+        canvas = None
+        fig = plot_function()
+        canvas = FigureCanvasTkAgg(fig, master=tab3)
+        canvas_widget = canvas.get_tk_widget()
+        canvas_widget.pack(fill='both', expand=True)
+    else:
+        # Generate and display the selected plot
+        fig = plot_function()
+        canvas = FigureCanvasTkAgg(fig, master=tab3)
+        canvas_widget = canvas.get_tk_widget()
+        canvas_widget.pack(fill='both', expand=True)
+
+def DFtoCSV(data):
+    df = pd.DataFrame(data)                                                                     # convert to dataframe
+    downloads_folder = os.path.expanduser('~/Downloads')
+    csv_file_path = os.path.join(downloads_folder, 'canvas_data.csv')
+    df.to_csv(csv_file_path, index=False)    
+
+def export_file():
+    while True:                                                                                 # loop until user enters a filename or no data to export
+        if df is not None:                                                                      # if df is not empty
+            DFtoCSV(df)
+            messagebox.showinfo("Export Successful", f"Data exported to CSV file: 'canvas_data.csv'")
+            break
+        else:
+            messagebox.showinfo("Export Unsuccessful!", "No data to export!")
+            break
+
+#Upper frame in Tab3 showing buttons
+controls_frame = LabelFrame(tab3, text='List of Graphs', background='light grey', height=5)
+RBFTbutton = Button(controls_frame, text = 'Renting out of Applications by Flat Type', padx=10, pady=5,command=lambda: update_canvas(RentalbyFlatType))
+RBFTbutton.pack( side = LEFT)
+RVRAbutton = Button(controls_frame, text = 'Resale vs Rental Applications Registered', padx=10, pady=5,command=lambda: update_canvas(ResaleAndRentalApplications))
+RVRAbutton.pack( side = LEFT )
+RPPBTbutton = Button(controls_frame, text = 'Resale Price Progression by Towns', padx=10, pady=5,command=lambda: update_canvas(ResalePriceProgression))
+RPPBTbutton.pack( side = LEFT )
+exportbutton = Button(controls_frame, text = 'Export CSV', padx=10, pady=5,command=export_file)
+exportbutton.pack( side = RIGHT )
+controls_frame.pack(fill='both', expand='0', side=TOP, padx=20, pady=10)
 
 displayCovidGraph(tab1) 
 displayHDB(tab2)
