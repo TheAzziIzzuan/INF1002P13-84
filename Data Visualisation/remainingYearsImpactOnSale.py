@@ -80,13 +80,13 @@ customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-bl
 gui = customtkinter.CTk()
 
 style = ttk.Style()
-gui.title("Resale Flat Prices")
+gui.title("Remaining years of HDB(the Age) affects the resale price")
 gui.geometry("1080x720")
 
 room_types = ["2 ROOM", "3 ROOM", "4 ROOM", "5 ROOM", "EXECUTIVE"]
 
 # text section
-message = "This page shows if the remaining years of HDB(the Age) affects the resale price"
+message = "Remaining years of HDB(the Age) affects the resale price"
 label = customtkinter.CTkLabel(gui, text=message, font=("Arial", 25))
 label.pack(anchor="center")
 
