@@ -1,7 +1,7 @@
 import pandas as pd
 import requests
 
-df = pd.read_csv(r"project\\HDBPropertyInformation.csv")
+df = pd.read_csv(r"datasets\\HDBPropertyInformation.csv")
 df.head()
 
 df['Address'] = df['blk_no'] + " " + df['street']
