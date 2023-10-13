@@ -1,9 +1,9 @@
 import csv  
  
-with open("datasets\hdb-property-coords.csv", "r") as source: 
+with open("datasets\hdb-property-coords(FULL).csv", "r") as source: 
     reader = csv.reader(source) 
       
-    with open("output.csv", "w") as result: 
+    with open("hdbcoords.csv", "w") as result: 
         writer = csv.writer(result) 
         for r in reader: 
             
