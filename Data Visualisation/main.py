@@ -18,6 +18,7 @@ def df_to_csv(data, filename_prefix):
     df = pd.DataFrame(data)                                                                     # convert to dataframe
     df.to_csv(filename, index=False)                                                            # export to csv, index=false ensure that the index is not exported
 
+#################################### TAB 1 ####################################
 
 def welcomePage(tab1):
     welcomeFrame = ttk.Frame(tab1)
@@ -25,14 +26,13 @@ def welcomePage(tab1):
 
 
     # Create a label with a welcome message
-    label = tk.Label(welcomeFrame, text="Welcome to My App!", font=("Arial", 20))
+    label = tk.Label(welcomeFrame, text="Welcome to the analysis of HDBs!", font=("Arial", 20))
     label.pack(pady=50)  # Adjust the padding
+    
 
 
 
-
-
-#################################### TAB 1 ####################################
+#################################### TAB 2 ####################################
 
 def displayCovidGraph(tab2):
     global df
@@ -70,7 +70,7 @@ def exportfile():
             break
 
 
-#################################### TAB 2 ####################################
+#################################### TAB 3 ####################################
 
 def displayHDB(tab3):
     x, y  = numberofHDBs.noHDBs()
@@ -111,7 +111,7 @@ exportButton.pack(side=tk.BOTTOM, pady=15)                                      
 
 
 
-#################################### TAB 3 ####################################
+#################################### TAB 4 ####################################
 
 def RentalbyFlatType():
     global df2
@@ -237,7 +237,7 @@ RPPBTbutton.pack( side = LEFT )
 exportbutton = Button(controls_frame, text = 'Export CSV', padx=10, pady=5,command=export_file)
 exportbutton.pack( side = RIGHT )
 controls_frame.pack(fill='both', expand='0', side=TOP, padx=20, pady=10)
-#################################### END OF TAB 3 ####################################
+#################################### END OF TAB 4 ####################################
 #test
 #################################### TAB 5 ###########################################
 
