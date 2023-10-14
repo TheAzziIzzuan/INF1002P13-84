@@ -19,9 +19,9 @@ def exportcsv(room_type):
         filename = f"List of {room_type}.csv"  # get name of room_type user selected
         df = pd.DataFrame(data)  # select the data that has the room_type
         df.to_csv(filename, index=False)
+        tkinter.messagebox.showinfo("Success!", "File has been exported!")
     else:
-        tkinter.messagebox.showinfo("ERROR!",
-                                    "No Room Type is selected!")  # if global current room type is empty it will return a error pop up
+        tkinter.messagebox.showinfo("ERROR!", "No Room Type is selected!")  # if global current room type is empty it will return a error pop up
 
 
 # gets data from csv and split them into individual data
