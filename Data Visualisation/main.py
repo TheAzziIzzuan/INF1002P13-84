@@ -221,10 +221,10 @@ notebook.add(tab4, text="HDBs in Singapore")
 
 # Define a function to display HDB information in a canvas
 def displayHDBinSingapore(tab4):
-    canvas = tk.Canvas(tab4,width=600, height=600)
+    canvas = tk.Canvas(tab4,width=400, height=400)
     canvas.pack(fill=tk.BOTH, expand=True)
 
-    image = PhotoImage(file="Data Visualisation\HDBinSG.png")
+    image = tk.PhotoImage(file="Data Visualisation\HDBinSG.png")
     image_label = tk.Label(canvas, image=image)
     image_label.pack()
 
@@ -232,7 +232,7 @@ def displayHDBinSingapore(tab4):
     This is the overall view of the HDBs in Singapore.
     """
     explanation_label = tk.Label(canvas, text=explanation_text, justify='center')
-    canvas.create_window(600, 600, anchor=tk.W, window=explanation_label)
+    canvas.create_window(10, 10, anchor=tk.W, window=explanation_label)
 
     def open_link(event):
         webbrowser.open("Data Visualisation\scatter_map.html")
