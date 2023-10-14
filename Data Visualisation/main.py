@@ -5,7 +5,7 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 import numpy as np
 import priceCovid 
-import numberofHDBsTest
+import numberofHDBs
 from tkinter import simpledialog
 from tkinter import messagebox
 import os
@@ -73,7 +73,7 @@ def exportfile():
 #################################### TAB 2 ####################################
 
 def displayHDB(tab3):
-    x, y  = numberofHDBsTest.noHDBs()
+    x, y  = numberofHDBs.noHDBs()
     df = pd.DataFrame({'bldg_contract_town': x, 'total_dwelling_units': y})
     df.to_csv('hdb_data.csv', index=False)
     fig = plt.figure(figsize=(10, 6))

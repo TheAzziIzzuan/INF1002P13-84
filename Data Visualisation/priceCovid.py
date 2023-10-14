@@ -1,10 +1,4 @@
-import matplotlib.pyplot as plt 
 import pandas as pd 
-import tkinter as tk
-from tkinter import ttk
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-import numpy as np
-
 
 def priceCovid():
     df = pd.read_csv('datasets\Resale_Flat_Prices_Jan_2013_to_Sep_2023.csv') 
