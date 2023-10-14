@@ -98,10 +98,12 @@ tab1 = ttk.Frame(notebook)
 tab2 = ttk.Frame(notebook)
 tab3 = ttk.Frame(notebook)
 tab4 = ttk.Frame(notebook)
+tab5 = ttk.Frame(notebook)
 notebook.add(tab1, text="Welcome")
 notebook.add(tab2, text="Resale Price before and after COVID-19")
 notebook.add(tab3, text="Number of HDBs")   
-notebook.add(tab4, text="Rental and Resale")  
+notebook.add(tab4, text="Rental and Resale") 
+notebook.add(tab5, text="Does Remaining Years affect resale")
 notebook.pack(expand=True, fill="both") #fill the entire space of the window
 
 exportButton = tk.Button(tab2, text="Export!", command=exportfile)
@@ -236,6 +238,8 @@ exportbutton = Button(controls_frame, text = 'Export CSV', padx=10, pady=5,comma
 exportbutton.pack( side = RIGHT )
 controls_frame.pack(fill='both', expand='0', side=TOP, padx=20, pady=10)
 #################################### END OF TAB 3 ####################################
+
+#################################### TAB 5 ####################################
 
 welcomePage(tab1)
 displayCovidGraph(tab2) 
