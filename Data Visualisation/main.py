@@ -248,6 +248,8 @@ def displayHDBinSingapore(tab4):
     text_label = tk.Label(canvas, text=text_after_link)
     canvas.create_window(10, 360, anchor=tk.W, window=text_label)
 
+# Create a Tkinter window
+window.title("Resale Price Graph")
 
 tab4 = ttk.Frame(notebook) #adding my tab
 
