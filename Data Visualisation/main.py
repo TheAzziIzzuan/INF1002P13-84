@@ -222,7 +222,9 @@ def displayHDBinSingapore(tab4):
 
     image = PhotoImage(file="Data Visualisation\HDBinSG.png")
     image_label = tk.Label(canvas, image=image)
-    canvas.create_window(10, 200, anchor=tk.NW, window=image_label)
+    # canvas.create_window(10, 200, anchor=tk.NW, window=image_label)
+    canvas.create_window(canvas.winfo_width() / 2, canvas.winfo_height() / 2, anchor=tk.CENTER, window=image_label)
+
     image_label.pack()
 
     explanation_text = """
