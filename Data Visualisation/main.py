@@ -238,8 +238,8 @@ RPPBTbutton.pack( side = LEFT )
 exportbutton = Button(controls_frame, text = 'Export CSV', padx=10, pady=5,command=export_file)
 exportbutton.pack( side = RIGHT )
 controls_frame.pack(fill='both', expand='0', side=TOP, padx=20, pady=10)
-#################################### END OF TAB 3 ####################################
-#test
+#################################### END OF TAB 4 ####################################
+
 #################################### TAB 5 ###########################################
 
 welcomePage(tab1)
