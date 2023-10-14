@@ -10,6 +10,11 @@ from tkinter import simpledialog
 from tkinter import messagebox
 import os
 import mplcursors
+import customtkinter
+import LoanCalculator
+from LoanCalculator import loancalculate
+
+
 
 df = None
 
@@ -27,7 +32,9 @@ def welcomePage(tab1):
 
     # Create a label with a welcome message
     label = tk.Label(welcomeFrame, text="Welcome to the analysis of HDBs!", font=("Arial", 20))
+    label2 = tk.Label(welcomeFrame, text="Click on the different tabs to get some insights on the different stats compiled on HDB", font=("Arial", 15))
     label.pack(pady=50)  # Adjust the padding
+    label2.pack(pady=30)
     
 
 
@@ -103,7 +110,7 @@ notebook.add(tab1, text="Welcome")
 notebook.add(tab2, text="Resale Price before and after COVID-19")
 notebook.add(tab3, text="Number of HDBs")   
 notebook.add(tab4, text="Rental and Resale") 
-notebook.add(tab5, text="Does Remaining Years affect resale")
+notebook.add(tab5, text="Estimated Loan Calculator")
 notebook.pack(expand=True, fill="both") #fill the entire space of the window
 
 exportButton = tk.Button(tab2, text="Export!", command=exportfile)
@@ -240,10 +247,42 @@ controls_frame.pack(fill='both', expand='0', side=TOP, padx=20, pady=10)
 #################################### END OF TAB 4 ####################################
 
 #################################### TAB 5 ###########################################
+def display_loan(tab5):
 
+    frame = ttk.Frame(tab5)
+    frame.pack(fill="both", expand=True)
+    message = "Estimated HDB Loan Calculator"
+    label = customtkinter.CTkLabel(frame, text=message, font=("Arial", 25))
+    label.pack(anchor="center")
+
+    income = ttk.Label(frame, text="Income:")
+    income.pack()
+
+    incomeinput = ttk.Entry(frame)
+    incomeinput.pack()
+
+    years = ttk.Label(frame, text="Loan Duration:")
+    years.pack()
+
+    yearsvariable = tk.StringVar()
+    yearsselect = ttk.Combobox(frame, textvariable=yearsvariable, values=["15 years", "20 years", "25 years"], state="readonly")
+    yearsselect.pack()
+
+    calculate = customtkinter.CTkButton(frame, text="Calculate", command=lambda:loancalculate(incomeinput, yearsvariable,loanresult))
+    calculate.place(relx=0.5, rely=0.90, anchor=customtkinter.CENTER)
+
+    loanresult = ttk.Label(frame, text="Loan Amount: ")
+    loanresult.pack()
+    
+#################################### END OF TAB 5 ###########################################
+#################################### TAB 6 ###########################################
+
+#################################### END OF TAB 6 ###########################################
 welcomePage(tab1)
 displayCovidGraph(tab2) 
 displayHDB(tab3)
+display_loan(tab5)
+
 
 
 window.mainloop()

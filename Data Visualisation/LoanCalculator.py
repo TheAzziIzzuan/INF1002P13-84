@@ -105,7 +105,7 @@ def twenty_five_years_loan(income):
     return estimated_loan_amount
 
 
-def loancalculate():
+def loancalculate(incomeinput,yearsvariable,loanresult):
 
     try:
         income = int(incomeinput.get())
@@ -133,36 +133,36 @@ def loancalculate():
 
 #####################tkinter section########################
 
-customtkinter.set_appearance_mode("light")  # Modes: system (default), light, dark
-customtkinter.set_default_color_theme("blue")
+# customtkinter.set_appearance_mode("light")  # Modes: system (default), light, dark
+# customtkinter.set_default_color_theme("blue")
 
-gui = customtkinter.CTk()
+# gui = customtkinter.CTk()
 
-style = ttk.Style()
-gui.title("Estimated HDB Loan Calculator")
-gui.geometry("520x180")
+# style = ttk.Style()
+# gui.title("Estimated HDB Loan Calculator")
+# gui.geometry("520x180")
 
-message = "Estimated HDB Loan Calculator"
-label = customtkinter.CTkLabel(gui, text=message, font=("Arial", 25))
-label.pack(anchor="center")
+# message = "Estimated HDB Loan Calculator"
+# label = customtkinter.CTkLabel(gui, text=message, font=("Arial", 25))
+# label.pack(anchor="center")
 
-income = ttk.Label(gui, text="Income:")
-income.pack()
+# income = ttk.Label(gui, text="Income:")
+# income.pack()
 
-incomeinput = ttk.Entry(gui)
-incomeinput.pack()
+# incomeinput = ttk.Entry(gui)
+# incomeinput.pack()
 
-years = ttk.Label(gui, text="Loan Duration:")
-years.pack()
+# years = ttk.Label(gui, text="Loan Duration:")
+# years.pack()
 
-yearsvariable = tk.StringVar()
-yearsselect = ttk.Combobox(gui, textvariable=yearsvariable, values=["15 years", "20 years", "25 years"], state="readonly")
-yearsselect.pack()
+# yearsvariable = tk.StringVar()
+# yearsselect = ttk.Combobox(gui, textvariable=yearsvariable, values=["15 years", "20 years", "25 years"], state="readonly")
+# yearsselect.pack()
 
-calculate = customtkinter.CTkButton(gui, text="Calculate", command=loancalculate)
-calculate.place(relx=0.5, rely=0.90, anchor=customtkinter.CENTER)
+# calculate = customtkinter.CTkButton(gui, text="Calculate", command=loancalculate)
+# calculate.place(relx=0.5, rely=0.90, anchor=customtkinter.CENTER)
 
-loanresult = ttk.Label(gui, text="Loan Amount: ")
-loanresult.pack()
+# loanresult = ttk.Label(gui, text="Loan Amount: ")
+# loanresult.pack()
 
-gui.mainloop()
+# gui.mainloop()
