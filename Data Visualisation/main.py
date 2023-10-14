@@ -221,6 +221,7 @@ def displayHDBinSingapore(tab4):
     canvas.pack(fill=tk.BOTH, expand=True)
 
     image = PhotoImage(file="Data Visualisation\HDBinSG.png")
+    image = image.subsample(2, 2)
     image_label = tk.Label(canvas, image=image)
     canvas.create_window(10, 10, anchor=tk.NW, window=image_label)
     image_label.pack()
@@ -248,8 +249,6 @@ def displayHDBinSingapore(tab4):
     text_label = tk.Label(canvas, text=text_after_link)
     canvas.create_window(10, 360, anchor=tk.W, window=text_label)
 
-# Create a Tkinter window
-window.title("Resale Price Graph")
 
 tab4 = ttk.Frame(notebook) #adding my tab
 
