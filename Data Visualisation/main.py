@@ -27,8 +27,9 @@ def welcomePage(tab1):
 
     # Create a label with a welcome message
     label = tk.Label(welcomeFrame, text="Welcome to the analysis of HDBs!", font=("Arial", 20))
+    label2 = tk.Label(welcomeFrame, text="Click on the different tabs to get some insights on the different stats compiled on HDB", font=("Arial", 15))
     label.pack(pady=50)  # Adjust the padding
-    
+    label2.pack(pady=30)
 
 
 
