@@ -9,6 +9,8 @@ import numberofHDBsTest
 from tkinter import simpledialog
 from tkinter import messagebox
 import os
+import webbrowser
+from tkinter import PhotoImage
 
 df = None
 
@@ -212,7 +214,51 @@ exportbutton.pack( side = RIGHT )
 controls_frame.pack(fill='both', expand='0', side=TOP, padx=20, pady=10)
 #################################### END OF TAB 3 ####################################
 
+# Define a function to display HDB information in a canvas
+def displayHDBinSingapore(tab4):
+    canvas = tk.Canvas(tab4)
+    canvas.pack(fill=tk.BOTH, expand=True)
+
+    image = PhotoImage(file="Data Visualisation\HDBinSG.png")
+    image_label = tk.Label(canvas, image=image)
+    canvas.create_window(10, 10, anchor=tk.NW, window=image_label)
+
+    explanation_text = """
+    This is the overall view of the HDBs in Singapore.
+    """
+    explanation_label = tk.Label(canvas, text=explanation_text, justify='left')
+    canvas.create_window(10, 200, anchor=tk.W, window=explanation_label)
+
+    def open_link(event):
+        webbrowser.open("Data Visualisation\scatter_map.html")
+
+    text_before_link = "To see a clearer version, click "
+    hyperlink_text = "HERE"
+    text_after_link = "to view the interactive map!"
+    hyperlink_label = tk.Label(canvas, text=text_before_link, cursor="hand2")
+    canvas.create_window(10, 300, anchor=tk.W, window=hyperlink_label)
+    hyperlink_label.bind("<Button-1>", open_link)
+
+    hyperlink_label = tk.Label(canvas, text=hyperlink_text, cursor="hand2", fg="blue")
+    canvas.create_window(10, 330, anchor=tk.W, window=hyperlink_label)
+    hyperlink_label.bind("<Button-1>", open_link)
+
+    text_label = tk.Label(canvas, text=text_after_link)
+    canvas.create_window(10, 360, anchor=tk.W, window=text_label)
+
+# Create a Tkinter window
+window = tk.Tk()
+window.title("Resale Price Graph")
+
+tab4 = ttk.Frame(notebook) #adding my tab
+
+# Add tabs to the notebook
+notebook.add(tab4, text="HDBs in Singapore")
+
+
+
 displayCovidGraph(tab1) 
 displayHDB(tab2)
+displayHDBinSingapore(tab4)
 
 window.mainloop()
