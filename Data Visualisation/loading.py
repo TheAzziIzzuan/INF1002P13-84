@@ -15,12 +15,10 @@ y = (root.winfo_screenheight() // 2) - (height // 2)            # Retrieves heig
 
 
 root.geometry('{}x{}+{}+{}'.format(width, height, x, y))        # set the size of the window and the position of the window, width x height + x position + y position
-# root.overrideredirect(True)                                   # make it borderless
+
 
 root.configure(background='#ffffff')
 
-# welcome_label = Label(text="Your application is loading...", font=("Arial", 20), bg='#00092E', fg='white')
-# welcome_label.place(x=100, y=25)
 
 progress_label = Label(root, text="Loading...", font=("Arial", 12, "bold"), bg='#ffffff', fg='black')
 progress_label.place(x=210, y=270)
@@ -30,7 +28,7 @@ bg_label.place(x=155, y=30)
 
 progress = ttk.Style()                                          #  provides methods and properties that allow you to customize various aspects of ttk widgets
 progress.theme_use('alt')                                       #  set the theme to alt
-# progress.configure('red.Horizontal.TProgressbar', background='#108cff', thickness=10)
+
 
 progress = Progressbar(root, orient=HORIZONTAL, length = 400, mode='determinate', style='Horizontal.TProgressbar')
 progress.place(x=65, y=300)
@@ -46,7 +44,7 @@ def load():
     if i <= 100:                                        # 100 times, in this case 100%
         txt = "Loading..." + (str(1*i) + "%")           #display the percentage of 1*i
         progress_label.config(text=txt)                 #update the label
-        progress_label.after(100, load)                 #call the function after 600ms
+        progress_label.after(600, load)                 #call the function after 600ms
         progress['value'] = 1*i                         #update the progress bar, 1*i is the percentage
         i += 10                                         #increment i + 10                      
     else:
