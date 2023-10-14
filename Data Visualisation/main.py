@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import ttk, LEFT, TOP, RIGHT, LabelFrame, Button
 import matplotlib.pyplot as plt 
+from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 import numpy as np
@@ -11,6 +12,7 @@ from tkinter import messagebox
 import os
 import webbrowser
 from tkinter import PhotoImage
+from PIL import Image, ImageTk
 
 df = None
 
@@ -224,38 +226,117 @@ def displayHDBinSingapore(tab4):
     canvas = tk.Canvas(tab4,width=400, height=400)
     canvas.pack(fill=tk.BOTH, expand=True)
 
-    image = tk.PhotoImage(file="Data Visualisation\HDBinSG.png")
-    image_label = tk.Label(canvas, image=image)
-    image_label.pack()
-
+    #Displaying the Map
+    image = Image.open("Data Visualisation\HDBinSG.png")
+    photo = ImageTk.PhotoImage(image)
+    image_label = tk.Label(canvas, image=photo)
+    image_label.photo = photo  #reference to avoid garbage collection
+    image_label.pack(pady=25)
+    
+    #Details related to the Image Label
     explanation_text = """
     This is the overall view of the HDBs in Singapore.
     """
-    explanation_label = tk.Label(canvas, text=explanation_text, justify='center')
-    canvas.create_window(10, 10, anchor=tk.W, window=explanation_label)
+    explanation_label = tk.Label(canvas, text=explanation_text, justify='center', font=("Helvetica", 16))
+    canvas.create_window(250, 470, anchor=tk.W, window=explanation_label)
 
-    def open_link(event):
+    def open_link(event): #function for the hyperlink
         webbrowser.open("Data Visualisation\scatter_map.html")
 
-    text_before_link = "To see a clearer version, click "
+    text_before_link = "To view a clearer version, click "
     hyperlink_text = "HERE"
     text_after_link = "to view the interactive map!"
-    hyperlink_label = tk.Label(canvas, text=text_before_link, cursor="hand2")
-    canvas.create_window(10, 300, anchor=tk.W, window=hyperlink_label)
+    hyperlink_label = tk.Label(canvas, text=text_before_link, cursor="hand2", font=("Helvetica", 12))
+    canvas.create_window(270, 510, anchor=tk.W, window=hyperlink_label) #For the sentence before hyperlink
     hyperlink_label.bind("<Button-1>", open_link)
 
-    hyperlink_label = tk.Label(canvas, text=hyperlink_text, cursor="hand2", fg="blue")
-    canvas.create_window(10, 330, anchor=tk.W, window=hyperlink_label)
+    hyperlink_label = tk.Label(canvas, text=hyperlink_text, cursor="hand2", fg="blue", font=("Helvetica", 12))
+    canvas.create_window(490, 510, anchor=tk.W, window=hyperlink_label) #hyperlink part
     hyperlink_label.bind("<Button-1>", open_link)
 
-    text_label = tk.Label(canvas, text=text_after_link)
-    canvas.create_window(10, 360, anchor=tk.W, window=text_label)
+    text_label = tk.Label(canvas, text=text_after_link, font=("Helvetica", 12))
+    canvas.create_window(540, 510, anchor=tk.W, window=text_label)
+
+#################################### END OF TAB 4 ####################################
+
+#################################### START OF TAB 5 ####################################
+
+tab5 = ttk.Frame(notebook) #adding my tab
+notebook.add(tab5, text="How Distance To Amenities Affect Resale Prices")
 
 
+def dislayPriceandAmenities(tab5):
 
+    #frame for Graph 1
+    frame1 = ttk.Frame(tab5)
+    frame1.grid(row=0, column=0, padx=10, pady=10)
+
+    # School and Resale Price Graph 1
+    df = pd.read_csv("datasets\schoolandprice(cleaned).csv")
+
+    figure1 = Figure(figsize=(7, 5), dpi=87)  # Adjust the figure size
+    subplot1 = figure1.add_subplot(111) 
+
+    x = df['Distance From Nearest School']
+    y = df['Resale Price']
+    coefficients = np.polyfit(x, y, 1)
+    best_fit_line = np.poly1d(coefficients)
+
+    subplot1.scatter(x, y)
+    subplot1.plot(x, best_fit_line(x), color='red', linestyle='-', label='Best Fit Line')
+
+    #Graph Title and Labels
+    subplot1.set_title('Price of HDB Based on Distance from Nearest School')
+    subplot1.set_xlabel('Distance From Nearest School')
+    subplot1.set_ylabel('Resale Price')  
+
+    # Add canvas1
+    canvas1 = FigureCanvasTkAgg(figure1, master=frame1)
+    canvas1.get_tk_widget().grid(row=0, column=0, padx=10, pady=10)
+    
+    # Explanation of Canvas1
+    explanation1 = tk.Label(tab5, text="Based on the results above, we can see that HDBs that are approximately less than \n0.4km or more than 1.3km from schools are less desirable. Those closer to schools \nmay be disturbed by the noise and those further away are inconvenienced \ndue to the distance or travel time.",font=("Helvetica", 12))
+
+    #adjusting location of graph and description
+    explanation1.grid(row=1, column=0, padx=10, pady=10)
+
+    #create frame for Graph 2
+    frame2 = ttk.Frame(tab5)
+    frame2.grid(row=0, column=1, padx=10, pady=10)
+    
+    # MRT and Resale Price Graph 2
+    figure2 = Figure(figsize=(7, 5), dpi=87)  #Figure Size
+    subplot2 = figure2.add_subplot(111)
+
+    data2 = pd.read_csv("datasets\HDBandNearestMrtCoords.csv")
+    x2 = data2['nearest_distance_to_mrt']
+    y2 = data2['resale_price']
+
+    # Create a figure and add subplots
+    coefficients = np.polyfit(x2, y2, 1)
+    best_fit_line = np.poly1d(coefficients)
+
+    subplot2.scatter(x2, y2)
+    subplot2.plot(x2, best_fit_line(x2), color='red', linestyle='-', label='Best Fit Line')
+
+    subplot2.set_title('Price of HDBs based on distance from MRT (AMK area)')
+    subplot2.set_xlabel('Distance From Nearest MRT Station')
+    subplot2.set_ylabel('Resale Price') 
+
+    canvas2 = FigureCanvasTkAgg(figure2, master=frame2)
+    canvas2.get_tk_widget().grid(row=0, column=1, padx=10, pady=10)
+        # Explanation of Canvas1
+    explanation2 = tk.Label(frame2, text="The graph above focuses on HDBs near Ang Mo Kio (AMK) MRT station \nwhich operates above the ground. We can see that the resale price \nfor those in 0.2km proximity to the station is noticably lower. \nThis may be due to the noise which comes from the MRT whenever it passes by. \nAs the MRT operates until 12am, this can cause a disturbance to families. However, \nwe can also see that the resale price of HDBs \nthat are further away from the station is lower compared to the rest \nas it due to the lack of convenience. ",font=("Helvetica", 12))
+
+    #adjusting location of graph and description
+    explanation2.grid(row=1, column=1, padx=10, pady=10)
+    
+    
+#################################### END OF TAB 5 ####################################
 
 displayCovidGraph(tab1) 
 displayHDB(tab2)
 displayHDBinSingapore(tab4)
+dislayPriceandAmenities(tab5)
 
 window.mainloop()
