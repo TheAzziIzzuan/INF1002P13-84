@@ -217,11 +217,10 @@ controls_frame.pack(fill='both', expand='0', side=TOP, padx=20, pady=10)
 #################################### START OF TAB 4 ####################################
 # Define a function to display HDB information in a canvas
 def displayHDBinSingapore(tab4):
-    canvas = tk.Canvas(tab4,width=400, height=400)
+    canvas = tk.Canvas(tab4,width=500, height=500)
     canvas.pack(fill=tk.BOTH, expand=True)
 
     image = PhotoImage(file="Data Visualisation\HDBinSG.png")
-    image = image.subsample(2, 2)
     image_label = tk.Label(canvas, image=image)
     canvas.create_window(10, 10, anchor=tk.NW, window=image_label)
     image_label.pack()
