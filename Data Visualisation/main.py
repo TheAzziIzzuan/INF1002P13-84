@@ -35,7 +35,6 @@ def welcomePage(tab1):
     label2 = tk.Label(welcomeFrame, text="Click on the different tabs to get some insights on the different stats compiled on HDB", font=("Arial", 15))
     label.pack(pady=50)  # Adjust the padding
     label2.pack(pady=30)
-    
 
 
 
