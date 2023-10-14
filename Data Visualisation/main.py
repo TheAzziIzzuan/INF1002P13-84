@@ -214,19 +214,21 @@ exportbutton.pack( side = RIGHT )
 controls_frame.pack(fill='both', expand='0', side=TOP, padx=20, pady=10)
 #################################### END OF TAB 3 ####################################
 
+#################################### START OF TAB 4 ####################################
 # Define a function to display HDB information in a canvas
 def displayHDBinSingapore(tab4):
-    canvas = tk.Canvas(tab4)
+    canvas = tk.Canvas(tab4,width=400, height=400)
     canvas.pack(fill=tk.BOTH, expand=True)
 
     image = PhotoImage(file="Data Visualisation\HDBinSG.png")
     image_label = tk.Label(canvas, image=image)
     canvas.create_window(10, 10, anchor=tk.NW, window=image_label)
+    image_label.pack()
 
     explanation_text = """
     This is the overall view of the HDBs in Singapore.
     """
-    explanation_label = tk.Label(canvas, text=explanation_text, justify='left')
+    explanation_label = tk.Label(canvas, text=explanation_text, justify='center')
     canvas.create_window(10, 200, anchor=tk.W, window=explanation_label)
 
     def open_link(event):
@@ -246,9 +248,6 @@ def displayHDBinSingapore(tab4):
     text_label = tk.Label(canvas, text=text_after_link)
     canvas.create_window(10, 360, anchor=tk.W, window=text_label)
 
-# Create a Tkinter window
-window = tk.Tk()
-window.title("Resale Price Graph")
 
 tab4 = ttk.Frame(notebook) #adding my tab
 
