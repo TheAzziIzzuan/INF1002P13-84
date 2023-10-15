@@ -264,11 +264,14 @@ def displayHDBinSingapore(tab4):
 tab5 = ttk.Frame(notebook) #adding my tab
 notebook.add(tab5, text="How Distance To Amenities Affect Resale Prices")
 
-
 def dislayPriceandAmenities(tab5):
 
-    #frame for Graph 1
-    frame1 = ttk.Frame(tab5)
+    # Create a frame to contain both figures
+    figures_frame = ttk.Frame(tab5)
+    figures_frame.grid(row=0, column=0, padx=10, pady=10)
+
+    #frame for Graph 1 (SCHOOL)
+    frame1 = ttk.Frame(figures_frame)
     frame1.grid(row=0, column=0, padx=10, pady=10)
 
     # School and Resale Price Graph 1
@@ -292,18 +295,18 @@ def dislayPriceandAmenities(tab5):
 
     # Add canvas1
     canvas1 = FigureCanvasTkAgg(figure1, master=frame1)
-    canvas1.get_tk_widget().grid(row=0, column=0, padx=10, pady=10)
-    
+    canvas1.get_tk_widget().grid(row=0, column=0, padx=10, pady=10, sticky="N")
+
     # Explanation of Canvas1
-    explanation1 = tk.Label(tab5, text="Based on the results above, we can see that HDBs that are approximately less than \n0.4km or more than 1.3km from schools are less desirable. Those closer to schools \nmay be disturbed by the noise and those further away are inconvenienced \ndue to the distance or travel time.",font=("Helvetica", 12))
+    explanation1 = tk.Label(frame1, text="Based on the results above, we can see that HDBs that are approximately less than \n0.4km or more than 1.3km from schools are less desirable. Those closer to schools \nmay be disturbed by the noise and those further away are inconvenienced \ndue to the distance or travel time.\n\n.", font=("Helvetica", 12))
 
-    #adjusting location of graph and description
-    explanation1.grid(row=1, column=0, padx=10, pady=10)
+    # Adjusting location of graph and description
+    explanation1.grid(row=2, column=0, padx=10, pady=10, sticky="N")
 
-    #create frame for Graph 2
-    frame2 = ttk.Frame(tab5)
+    # Create frame for Graph 2 (MRT)
+    frame2 = ttk.Frame(figures_frame)
     frame2.grid(row=0, column=1, padx=10, pady=10)
-    
+
     # MRT and Resale Price Graph 2
     figure2 = Figure(figsize=(7, 5), dpi=87)  #Figure Size
     subplot2 = figure2.add_subplot(111)
@@ -324,13 +327,11 @@ def dislayPriceandAmenities(tab5):
     subplot2.set_ylabel('Resale Price') 
 
     canvas2 = FigureCanvasTkAgg(figure2, master=frame2)
-    canvas2.get_tk_widget().grid(row=0, column=1, padx=10, pady=10)
-        # Explanation of Canvas1
-    explanation2 = tk.Label(frame2, text="The graph above focuses on HDBs near Ang Mo Kio (AMK) MRT station \nwhich operates above the ground. We can see that the resale price \nfor those in 0.2km proximity to the station is noticably lower. \nThis may be due to the noise which comes from the MRT whenever it passes by. \nAs the MRT operates until 12am, this can cause a disturbance to families. However, \nwe can also see that the resale price of HDBs \nthat are further away from the station is lower compared to the rest \nas it due to the lack of convenience. ",font=("Helvetica", 12))
+    canvas2.get_tk_widget().grid(row=0, column=0, padx=10, pady=10, sticky="N")
 
-    #adjusting location of graph and description
-    explanation2.grid(row=1, column=1, padx=10, pady=10)
-    
+    # Explanation of Canvas2
+    explanation2 = tk.Label(frame2, text="The graph above focuses on HDBs near Ang Mo Kio (AMK) MRT station which \noperates above the ground. We can see that the resale price for those in 0.2km \nproximity to the station is noticeably lower. This may be due to the noise which \ncomes from the MRT whenever it passes by. As the MRT operates until 12am,\n this can cause a disturbance to families. However, we can also see that the \nresale price of HDBs that are further away from the station is lower compared \nto the rest as it is due to the lack of convenience. ", font=("Helvetica", 12))
+    explanation2.grid(row=1, column=0, padx=10, pady=10, sticky="N")
     
 #################################### END OF TAB 5 ####################################
 
