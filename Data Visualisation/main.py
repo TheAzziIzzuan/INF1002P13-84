@@ -18,6 +18,8 @@ from tkinter import PhotoImage
 import webbrowser
 from PIL import Image, ImageTk
 from matplotlib.figure import Figure
+import zipfile
+import io
 
 
 ##################### CREATING TABS ####################################################
@@ -152,8 +154,21 @@ def displayHDBinSingapore(tab3):
 #################################### TAB 4 ####################################
 
 #Line graph of average price of HDB in each town
+
+def extract_and_read_zipped_data(zip_path, file_name):
+    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+        with zip_ref.open(file_name) as file:
+            data = file.read()
+            df = pd.read_csv(io.BytesIO(data))
+            return df
+        
 def displayAveragePrice(tab4):
-    data = pd.read_csv('datasets\hdb_latest.csv')
+    zip_file_path = 'datasets\hdb_latest.zip'
+    file_name = 'hdb_latest.csv'
+
+    # Extract and read the zipped data
+    data = extract_and_read_zipped_data(zip_file_path, file_name)
+
 
     # Create a frame for the tab
     tab_frame = ttk.Frame(tab4)
