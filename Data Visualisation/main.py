@@ -30,12 +30,13 @@ def welcomePage(tab1):
     welcomeFrame = ttk.Frame(tab1)
     welcomeFrame.pack(fill=tk.BOTH, expand=True)
 
-
     # Create a label with a welcome message
-    label = tk.Label(welcomeFrame, text="Welcome to the analysis of HDBs!", font=("Arial", 20))
-    label2 = tk.Label(welcomeFrame, text="Click on the different tabs to get some insights on the different stats compiled on HDB", font=("Arial", 15))
+    label = tk.Label(welcomeFrame, text="Welcome to the analysis of HDBs!", font=("Arial", 30))
+    label2 = tk.Label(welcomeFrame, text="Click on the different tabs to get some insights on the different stats compiled on HDB", font=("Arial", 20))
     label.pack(pady=50)  # Adjust the padding
     label2.pack(pady=30)
+
+
 
 
 
@@ -99,8 +100,12 @@ def displayHDB(tab3):
 window = tk.Tk() 
 window.title("Resale Price Graph")
 
+# create a style for the tabs
+customed_style = ttk.Style()
+customed_style.configure('Custom.TNotebook.Tab', padding=[12, 12], font=('Arial', 15))
+
 # Create a notebook with tabs
-notebook = ttk.Notebook(window) #widget that manages a collection of windows/displays
+notebook = ttk.Notebook(window, style='Custom.TNotebook') #widget that manages a collection of windows/displays
 tab1 = ttk.Frame(notebook) 
 tab2 = ttk.Frame(notebook)
 tab3 = ttk.Frame(notebook)
@@ -338,6 +343,9 @@ def displayAgeOfHDBOwners(tab8):
     plt.xlabel('Year')
     plt.ylabel('Household Reference Person')
     plt.xticks(year)
+
+    # name the title for the graph
+    plt.title("Age Trends in HDB Owners")
 
     # show legend at top right corner
     plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
