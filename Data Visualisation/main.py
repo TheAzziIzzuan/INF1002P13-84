@@ -120,6 +120,7 @@ notebook.add(tab4, text="Rental and Resale")
 notebook.add(tab5, text="Estimated Loan Calculator")
 notebook.add(tab7, text="HDB Unit Types By Household Income")
 notebook.add(tab8, text="Age Trends In HDB Owners")
+notebook.add(tab9, text="BTO Sale Launch Analysis")
 notebook.pack(expand=True, fill="both") #fill the entire space of the window
 
 exportButton = tk.Button(tab2, text="Export!", command=exportfile)
@@ -355,6 +356,9 @@ def displayAgeOfHDBOwners(tab8):
     canvas_widget.pack(fill=tk.BOTH, expand=True)
 
 #################################### END OF TAB 8 ############################################
+#################################### TAB 9 ############################################
+def displayBTOSaleLaunchAnalysis(tab9):
+#################################### END OF TAB 9 ############################################
 
 welcomePage(tab1)
 displayCovidGraph(tab2) 
@@ -362,6 +366,6 @@ displayHDB(tab3)
 display_loan(tab5)
 displayHDBTypesByIncome(tab7)
 displayAgeOfHDBOwners(tab8)
-
+displayBTOSaleLaunchAnalysis(tab9)
 
 window.mainloop()
