@@ -4,24 +4,11 @@ import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 import pandas as pd
 import numpy as np
-import priceCovid 
-import numberofHDBs
-from tkinter import simpledialog
-from tkinter import messagebox
-import os
-import mplcursors
-import customtkinter
-import LoanCalculator
+import priceCovid, os, mplcursors, customtkinter, webbrowser, zipfile, io, datetime
+from tkinter import simpledialog, messagebox, PhotoImage
 from LoanCalculator import loancalculate
-import tkinter as tk
-from tkinter import PhotoImage
-import webbrowser
 from PIL import Image, ImageTk
 from matplotlib.figure import Figure
-import zipfile
-import io
-import datetime
-
 
 ##################### CREATING TABS ####################################################
 
@@ -347,11 +334,11 @@ def ResalePriceProgression():
     ax.set_ylabel("Resale Price ($)")
     ax.set_ylim([300000, 1000000])
     values = np.arange(300000, 1000000, 50000)
+    
     plt.yticks(values)
     plt.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='x', alpha=0.7,which='both')
     plt.title("Average Resale Price Progression of Towns from 2013 to 2023")
-    plt.legend(bbox_to_anchor=(1.05, 1.05), loc='upper left')
-    plt.tight_layout()
+    plt.legend(bbox_to_anchor=(1, 1), loc='upper left')
     fig = plt.gcf()
     return fig
 
@@ -367,6 +354,7 @@ def update_canvas(plot_function):
         canvas = FigureCanvasTkAgg(fig, master=tab6)
         canvas_widget = canvas.get_tk_widget()
         canvas_widget.pack(fill='both', expand=True)
+        mplcursors.cursor(hover=True)
     else:
         # Generate and display the selected plot
         fig = plot_function()
