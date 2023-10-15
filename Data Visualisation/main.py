@@ -45,7 +45,7 @@ tab10 = ttk.Frame(notebook)
 notebook.add(tab1, text="Welcome")
 notebook.add(tab2, text="Resale Price before and after COVID-19")
 notebook.add(tab3, text="Overall View of HDBs in Singapore")   
-notebook.add(tab4, text="Number of HDBs in Each Area in SG") 
+notebook.add(tab4, text="Average Price of HDB Flat in Area") 
 notebook.add(tab5, text="Relation of Resale Prices and Distance From Amenities")
 notebook.add(tab6, text="Rental and Resale")
 notebook.add(tab7, text="Estimated Loan Calculator")
@@ -119,7 +119,7 @@ def displayHDBinSingapore(tab3):
     canvas.pack(fill=tk.BOTH, expand=True)
 
     #Displaying the Map
-    image = Image.open("Images\HDBinSG.png")
+    image = Image.open("datasets\HDBinSG.png")
     photo = ImageTk.PhotoImage(image)
     image_label = tk.Label(canvas, image=photo)
     image_label.photo = photo  #reference to avoid garbage collection
@@ -151,20 +151,38 @@ def displayHDBinSingapore(tab3):
 
 #################################### TAB 4 ####################################
 
-#Bar graph of hdb in each area in SG
-def displayHDB(tab4):
-    x, y  = numberofHDBs.noHDBs()
-    df = pd.DataFrame({'bldg_contract_town': x, 'total_dwelling_units': y})
-    df.to_csv('hdb_data.csv', index=False)
-    fig = plt.figure(figsize=(10, 6))
-    plt.bar(x, y)
-    plt.xlabel('Building Contract Town')
-    plt.ylabel('Total Dwelling Units')
-    plt.title('Amount of Units in Each Area in Singapore')
-    plt.xticks(rotation='vertical')
-    canvas = FigureCanvasTkAgg(fig, master=tab4)   
+#Line graph of average price of HDB in each town
+def displayAveragePrice(tab4):
+    data = pd.read_csv('datasets\hdb_latest.csv')
+
+    # Create a frame for the tab
+    tab_frame = ttk.Frame(tab4)
+    tab_frame.pack(fill=tk.BOTH, expand=True)
+
+    # Create a canvas to display the plot on the left side
+    canvas = FigureCanvasTkAgg(plt.Figure(figsize=(4, 4)), master=tab_frame)
     canvas_widget = canvas.get_tk_widget()
-    canvas_widget.pack(fill=tk.BOTH, expand=True) 
+    canvas_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+
+    # Calculate the average resale price for each town
+    average_prices = data.groupby('town_acronym')['resale_price'].mean().reset_index()
+
+    # Create a subplot for the line graph
+    ax = canvas.figure.add_subplot(111)
+
+    # Plot the average resale prices as a line graph
+    ax.plot(average_prices['town_acronym'], average_prices['resale_price'], marker='o', linestyle='-')
+
+    # labels and title
+    ax.set_xlabel("Town")
+    ax.set_ylabel("Average Resale Price")
+    ax.set_title("Average Resale Price by Town")
+    ax.tick_params(axis='x', rotation=45)  # Rotate x-axis labels if needed
+
+    # Legend 
+    label_text = "AMK - Ang Mo Kio\nBB - Bukit Batok\nBD - Bedok\nBH - Bishan\nBM - Bukit Merah\nBP - Bukit Panjang\nBT - Bukit Timah\nCCK - Choa Chu Kang\nCL - Clementi\nCT - Central Area\nGL - Geylang\nHG - Hougang\nJE - Jurong East\nJW - Jurong West\nKWN - Kallang/Whampoa\nMP - Marine Parade\nPG - Punggol\nPRC - Pasir Ris\nQT - Queenstown\nSB - Sembawang\nSGN - Serangoon\nSK - Sengkang\nTAP - Toa Payoh\nTP - Tampines\nWL - Woodlands\nYS - Yishun"
+    text_label = ttk.Label(tab_frame, text=label_text, wraplength=200,background='white', font=("Helvetica", 12))  # Adjust wraplength as needed
+    text_label.pack(side=tk.RIGHT, anchor=tk.N, fill=tk.BOTH, expand=True)
 
 #################################### TAB 5 ####################################
 
@@ -238,7 +256,7 @@ def dislayPriceandAmenities(tab5):
     explanation2.grid(row=1, column=0, padx=10, pady=10, sticky="N")
     
 
-#################################### TAB 6 ####################################
+# #################################### TAB 6 ####################################
 
 def RentalbyFlatType():
     global df2
@@ -465,16 +483,16 @@ def displayAgeOfHDBOwners(tab10):
     canvas_widget = canvas.get_tk_widget()
     canvas_widget.pack(fill=tk.BOTH, expand=True)
 
-#################################### END OF TAB 10 ############################################
-#################################### TAB 11 ############################################
+# #################################### END OF TAB 10 ############################################
+# #################################### TAB 11 ############################################
 
-#################################### END OF TAB 11 ############################################
+# #################################### END OF TAB 11 ############################################
 
-#call function for tabs
+# #call function for tabs
 welcomePage(tab1)
 displayCovidGraph(tab2)
 displayHDBinSingapore(tab3)
-displayHDB(tab4)
+displayAveragePrice(tab4)
 dislayPriceandAmenities(tab5)
 RentalbyFlatType() #tab6
 display_loan(tab7)
