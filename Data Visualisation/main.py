@@ -13,6 +13,12 @@ import mplcursors
 import customtkinter
 import LoanCalculator
 from LoanCalculator import loancalculate
+import tkinter as tk
+from tkinter import PhotoImage
+import webbrowser
+from PIL import Image, ImageTk
+from matplotlib.figure import Figure
+
 
 ##################### CREATING TABS ####################################################
 
@@ -31,22 +37,22 @@ tab2 = ttk.Frame(notebook)
 tab3 = ttk.Frame(notebook)
 tab4 = ttk.Frame(notebook)
 tab5 = ttk.Frame(notebook)
+tab6 = ttk.Frame(notebook)
 tab7 = ttk.Frame(notebook)
 tab8 = ttk.Frame(notebook)
 tab9 = ttk.Frame(notebook)
+tab10 = ttk.Frame(notebook)
 notebook.add(tab1, text="Welcome")
 notebook.add(tab2, text="Resale Price before and after COVID-19")
-notebook.add(tab3, text="Number of HDBs")   
-notebook.add(tab4, text="Rental and Resale") 
-notebook.add(tab5, text="Estimated Loan Calculator")
-notebook.add(tab7, text="HDB Unit Types By Household Income")
-notebook.add(tab8, text="Age Trends In HDB Owners")
-notebook.add(tab9, text="BTO Sale Launch Analysis")
+notebook.add(tab3, text="Overall View of HDBs in Singapore")   
+notebook.add(tab4, text="Number of HDBs in Each Area in SG") 
+notebook.add(tab5, text="Relation of Resale Prices and Distance From Amenities")
+notebook.add(tab6, text="Rental and Resale")
+notebook.add(tab7, text="Estimated Loan Calculator")
+notebook.add(tab8, text="BTO Sale Launch Analysis")
+notebook.add(tab9, text="HDB Unit Types By Household Income")
+notebook.add(tab10, text="Age Trends In HDB Owners")
 notebook.pack(expand=True, fill="both") #fill the entire space of the window
-
-exportButton = tk.Button(tab2, text="Export!", command=exportfile)
-exportButton.pack(side=tk.BOTTOM, pady=15)                                               # the side option specifices the sie of the parent widget to which the child widget should be packed
-
 
 df = None
 
@@ -102,10 +108,51 @@ def exportfile():
             messagebox.showinfo("Export Unsuccessful!", "No data to export!")
             break
 
+exportButton = tk.Button(tab2, text="Export!", command=exportfile)
+exportButton.pack(side=tk.BOTTOM, pady=15)                                               # the side option specifices the sie of the parent widget to which the child widget should be packed
 
 #################################### TAB 3 ####################################
 
-def displayHDB(tab3):
+# Define a function to display HDB information in a MAP
+def displayHDBinSingapore(tab3):
+    canvas = tk.Canvas(tab3,width=400, height=400)
+    canvas.pack(fill=tk.BOTH, expand=True)
+
+    #Displaying the Map
+    image = Image.open("Data Visualisation\HDBinSG.png")
+    photo = ImageTk.PhotoImage(image)
+    image_label = tk.Label(canvas, image=photo)
+    image_label.photo = photo  #reference to avoid garbage collection
+    image_label.pack(pady=25)
+    
+    #Details related to the Image Label
+    explanation_text = """
+    This is the overall view of the HDBs in Singapore.
+    """
+    explanation_label = tk.Label(canvas, text=explanation_text, justify='center', font=("Helvetica", 16))
+    canvas.create_window(250, 470, anchor=tk.W, window=explanation_label)
+
+    def open_link(event): #function for the hyperlink
+        webbrowser.open("Data Visualisation\scatter_map.html")
+
+    text_before_link = "To view a clearer version, click "
+    hyperlink_text = "HERE"
+    text_after_link = "to view the interactive map!"
+    hyperlink_label = tk.Label(canvas, text=text_before_link, cursor="hand2", font=("Helvetica", 12))
+    canvas.create_window(270, 510, anchor=tk.W, window=hyperlink_label) #For the sentence before hyperlink
+    hyperlink_label.bind("<Button-1>", open_link)
+
+    hyperlink_label = tk.Label(canvas, text=hyperlink_text, cursor="hand2", fg="blue", font=("Helvetica", 12))
+    canvas.create_window(490, 510, anchor=tk.W, window=hyperlink_label) #hyperlink part
+    hyperlink_label.bind("<Button-1>", open_link)
+
+    text_label = tk.Label(canvas, text=text_after_link, font=("Helvetica", 12))
+    canvas.create_window(540, 510, anchor=tk.W, window=text_label)
+
+#################################### TAB 4 ####################################
+
+#Bar graph of hdb in each area in SG
+def displayHDB(tab4):
     x, y  = numberofHDBs.noHDBs()
     df = pd.DataFrame({'bldg_contract_town': x, 'total_dwelling_units': y})
     df.to_csv('hdb_data.csv', index=False)
@@ -115,13 +162,83 @@ def displayHDB(tab3):
     plt.ylabel('Total Dwelling Units')
     plt.title('Amount of Units in Each Area in Singapore')
     plt.xticks(rotation='vertical')
-    canvas = FigureCanvasTkAgg(fig, master=tab3)   
+    canvas = FigureCanvasTkAgg(fig, master=tab4)   
     canvas_widget = canvas.get_tk_widget()
     canvas_widget.pack(fill=tk.BOTH, expand=True) 
+
+#################################### TAB 5 ####################################
+
+def dislayPriceandAmenities(tab5):
+
+    # Create a frame to contain both figures
+    figures_frame = ttk.Frame(tab5)
+    figures_frame.grid(row=0, column=0, padx=10, pady=10)
+
+    #frame for Graph 1 (SCHOOL)
+    frame1 = ttk.Frame(figures_frame)
+    frame1.grid(row=0, column=0, padx=10, pady=10)
+
+    # School and Resale Price Graph 1
+    df = pd.read_csv("datasets\schoolandprice(cleaned).csv")
+
+    figure1 = Figure(figsize=(7, 5), dpi=87)  # Adjust the figure size
+    subplot1 = figure1.add_subplot(111) 
+
+    x = df['Distance From Nearest School']
+    y = df['Resale Price']
+    coefficients = np.polyfit(x, y, 1)
+    best_fit_line = np.poly1d(coefficients)
+
+    subplot1.scatter(x, y)
+    subplot1.plot(x, best_fit_line(x), color='red', linestyle='-', label='Best Fit Line')
+
+    #Graph Title and Labels
+    subplot1.set_title('Price of HDB Based on Distance from Nearest School')
+    subplot1.set_xlabel('Distance From Nearest School')
+    subplot1.set_ylabel('Resale Price')  
+
+    # Add canvas1
+    canvas1 = FigureCanvasTkAgg(figure1, master=frame1)
+    canvas1.get_tk_widget().grid(row=0, column=0, padx=10, pady=10, sticky="N")
+
+    # Explanation of Canvas1
+    explanation1 = tk.Label(frame1, text="Based on the results above, we can see that HDBs that are approximately less than \n0.4km or more than 1.3km from schools are less desirable. Those closer to schools \nmay be disturbed by the noise and those further away are inconvenienced \ndue to the distance or travel time.\n\n.", font=("Helvetica", 12))
+
+    # Adjusting location of graph and description
+    explanation1.grid(row=2, column=0, padx=10, pady=10, sticky="N")
+
+    # Create frame for Graph 2 (MRT)
+    frame2 = ttk.Frame(figures_frame)
+    frame2.grid(row=0, column=1, padx=10, pady=10)
+
+    # MRT and Resale Price Graph 2
+    figure2 = Figure(figsize=(7, 5), dpi=87)  #Figure Size
+    subplot2 = figure2.add_subplot(111)
+
+    data2 = pd.read_csv("datasets\HDBandNearestMrtCoords.csv")
+    x2 = data2['nearest_distance_to_mrt']
+    y2 = data2['resale_price']
+
+    # Create a figure and add subplots
+    coefficients = np.polyfit(x2, y2, 1)
+    best_fit_line = np.poly1d(coefficients)
+
+    subplot2.scatter(x2, y2)
+    subplot2.plot(x2, best_fit_line(x2), color='red', linestyle='-', label='Best Fit Line')
+
+    subplot2.set_title('Price of HDBs based on distance from MRT (AMK area)')
+    subplot2.set_xlabel('Distance From Nearest MRT Station')
+    subplot2.set_ylabel('Resale Price') 
+
+    canvas2 = FigureCanvasTkAgg(figure2, master=frame2)
+    canvas2.get_tk_widget().grid(row=0, column=0, padx=10, pady=10, sticky="N")
+
+    # Explanation of Canvas2
+    explanation2 = tk.Label(frame2, text="The graph above focuses on HDBs near Ang Mo Kio (AMK) MRT station which \noperates above the ground. We can see that the resale price for those in 0.2km \nproximity to the station is noticeably lower. This may be due to the noise which \ncomes from the MRT whenever it passes by. As the MRT operates until 12am,\n this can cause a disturbance to families. However, we can also see that the \nresale price of HDBs that are further away from the station is lower compared \nto the rest as it is due to the lack of convenience. ", font=("Helvetica", 12))
+    explanation2.grid(row=1, column=0, padx=10, pady=10, sticky="N")
     
 
-#################################### TAB 4 ####################################
-
+#################################### TAB 6 ####################################
 
 def RentalbyFlatType():
     global df2
@@ -211,13 +328,13 @@ def update_canvas(plot_function):
         canvas.get_tk_widget().destroy()
         canvas = None
         fig = plot_function()
-        canvas = FigureCanvasTkAgg(fig, master=tab4)
+        canvas = FigureCanvasTkAgg(fig, master=tab6)
         canvas_widget = canvas.get_tk_widget()
         canvas_widget.pack(fill='both', expand=True)
     else:
         # Generate and display the selected plot
         fig = plot_function()
-        canvas = FigureCanvasTkAgg(fig, master=tab4)
+        canvas = FigureCanvasTkAgg(fig, master=tab6)
         canvas_widget = canvas.get_tk_widget()
         canvas_widget.pack(fill='both', expand=True)
 
@@ -237,7 +354,7 @@ def export_file():
             messagebox.showinfo("Export Unsuccessful!", "No data to export!")
             break
 
-controls_frame = LabelFrame(tab4, text='List of Graphs', background='light grey', height=5)
+controls_frame = LabelFrame(tab6, text='List of Graphs', background='light grey', height=5)
 RBFTbutton = Button(controls_frame, text = 'Renting out of Applications by Flat Type', padx=10, pady=5,command=lambda: update_canvas(RentalbyFlatType))
 RBFTbutton.pack( side = LEFT)
 RVRAbutton = Button(controls_frame, text = 'Resale vs Rental Applications Registered', padx=10, pady=5,command=lambda: update_canvas(ResaleAndRentalApplications))
@@ -247,12 +364,11 @@ RPPBTbutton.pack( side = LEFT )
 exportbutton = Button(controls_frame, text = 'Export CSV', padx=10, pady=5,command=export_file)
 exportbutton.pack( side = RIGHT )
 controls_frame.pack(fill='both', expand='0', side=TOP, padx=20, pady=10)
-#################################### END OF TAB 4 ####################################
 
-#################################### TAB 5 ###########################################
-def display_loan(tab5):
+#################################### TAB 7 ###########################################
+def display_loan(tab7):
 
-    frame = ttk.Frame(tab5)
+    frame = ttk.Frame(tab7)
     frame.pack(fill="both", expand=True)
     message = "Estimated HDB Loan Calculator"
     label = customtkinter.CTkLabel(frame, text=message, font=("Arial", 25))
@@ -277,14 +393,15 @@ def display_loan(tab5):
     loanresult = ttk.Label(frame, text="Loan Amount: ")
     loanresult.pack()
     
-#################################### END OF TAB 5 ###########################################
-#################################### TAB 6 ###########################################
+#################################### END OF TAB 7 ###########################################
 
-#################################### END OF TAB 6 ###########################################
+#################################### TAB 8 ###########################################
+# def displayBTOSaleLaunchAnalysis(tab8):
+#################################### END OF TAB 8 ###########################################
 
-#################################### TAB 7 ############################################
+#################################### TAB 9 ############################################
 
-def displayHDBTypesByIncome(tab7):
+def displayHDBTypesByIncome(tab9):
     # read the data from csv file
     data = pd.read_csv("datasets\HDBUnitTypeByIncome.csv")
     hdbtypes = data['HDBUnits']
@@ -302,15 +419,15 @@ def displayHDBTypesByIncome(tab7):
     plt.xlabel('HDB Unit Types')
     plt.ylabel('Average Monthly Household Income')
 
-    canvas = FigureCanvasTkAgg(fig, master=tab7)   
+    canvas = FigureCanvasTkAgg(fig, master=tab9)   
     canvas_widget = canvas.get_tk_widget()
     canvas_widget.pack(fill=tk.BOTH, expand=True)
 
-#################################### END OF TAB 7 ############################################
+#################################### END OF TAB 9 ############################################
 
-#################################### Tab 8 ################################################
+#################################### Tab 10 ################################################
 
-def displayAgeOfHDBOwners(tab8):
+def displayAgeOfHDBOwners(tab10):
     # fit the graph in the figure
     plt.rcParams['figure.figsize'] = [7.00, 3.50]
     plt.rcParams['figure.autolayout'] = True
@@ -344,21 +461,26 @@ def displayAgeOfHDBOwners(tab8):
     # show legend at top right corner
     plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
 
-    canvas = FigureCanvasTkAgg(fig, master=tab8)   
+    canvas = FigureCanvasTkAgg(fig, master=tab10)   
     canvas_widget = canvas.get_tk_widget()
     canvas_widget.pack(fill=tk.BOTH, expand=True)
 
-#################################### END OF TAB 8 ############################################
-#################################### TAB 9 ############################################
-# def displayBTOSaleLaunchAnalysis(tab9):
-#################################### END OF TAB 9 ############################################
+#################################### END OF TAB 10 ############################################
+#################################### TAB 11 ############################################
 
+#################################### END OF TAB 11 ############################################
+
+#call function for tabs
 welcomePage(tab1)
-displayCovidGraph(tab2) 
-displayHDB(tab3)
-display_loan(tab5)
-displayHDBTypesByIncome(tab7)
-displayAgeOfHDBOwners(tab8)
-displayBTOSaleLaunchAnalysis(tab9)
+displayCovidGraph(tab2)
+displayHDBinSingapore(tab3)
+displayHDB(tab4)
+dislayPriceandAmenities(tab5)
+RentalbyFlatType() #tab6
+display_loan(tab7)
+# displayBTOSaleLaunchAnalysis(tab8)
+displayHDBTypesByIncome(tab9)
+displayAgeOfHDBOwners(tab10)
+
 
 window.mainloop()
