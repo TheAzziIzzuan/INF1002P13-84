@@ -16,6 +16,7 @@ from LoanCalculator import loancalculate
 
 
 
+
 df = None
 
 def df_to_csv(data, filename_prefix):
@@ -105,11 +106,15 @@ tab2 = ttk.Frame(notebook)
 tab3 = ttk.Frame(notebook)
 tab4 = ttk.Frame(notebook)
 tab5 = ttk.Frame(notebook)
+tab7 = ttk.Frame(notebook)
+tab8 = ttk.Frame(notebook)
 notebook.add(tab1, text="Welcome")
 notebook.add(tab2, text="Resale Price before and after COVID-19")
 notebook.add(tab3, text="Number of HDBs")   
 notebook.add(tab4, text="Rental and Resale") 
 notebook.add(tab5, text="Estimated Loan Calculator")
+notebook.add(tab7, text="HDB Unit Types By Household Income")
+notebook.add(tab8, text="Age Trends In HDB Owners")
 notebook.pack(expand=True, fill="both") #fill the entire space of the window
 
 exportButton = tk.Button(tab2, text="Export!", command=exportfile)
@@ -277,11 +282,78 @@ def display_loan(tab5):
 #################################### TAB 6 ###########################################
 
 #################################### END OF TAB 6 ###########################################
+
+#################################### TAB 7 ############################################
+
+def displayHDBTypesByIncome(tab7):
+    # read the data from csv file
+    data = pd.read_csv("datasets\HDBUnitTypeByIncome.csv")
+    hdbtypes = data['HDBUnits']
+    income = data['HouseholdIncome']
+
+    fig = plt.figure(figsize=(10, 6))
+
+    # plot the bars
+    plt.bar(hdbtypes,income)
+
+    # name the title for the graph
+    plt.title("HDB Units By Household Income")
+
+    # set the x and y labels
+    plt.xlabel('HDB Unit Types')
+    plt.ylabel('Average Monthly Household Income')
+
+    canvas = FigureCanvasTkAgg(fig, master=tab7)   
+    canvas_widget = canvas.get_tk_widget()
+    canvas_widget.pack(fill=tk.BOTH, expand=True)
+
+#################################### END OF TAB 7 ############################################
+
+#################################### Tab 8 ################################################
+
+def displayAgeOfHDBOwners(tab8):
+    # fit the graph in the figure
+    plt.rcParams['figure.figsize'] = [7.00, 3.50]
+    plt.rcParams['figure.autolayout'] = True
+
+    # read the data from csv file
+    data = pd.read_csv("datasets\AgeTrendInHDBOwnership.csv")
+
+    fig = plt.figure(figsize=(10, 6))
+
+    line1 = data['Below 35']
+    line2 = data['35 - 49']
+    line3 = data['50 - 64']
+    line4 = data['65 and above']
+    year = data['Year']
+
+    # plot the line graphs
+    plt.plot(year, line1, label='Age Below 35')
+    plt.plot(year, line2, label='Age 35 - 49')
+    plt.plot(year, line3, label='Age 50 - 64')
+    plt.plot(year, line4, label='Age 65 and above')
+    plt.grid(True)
+
+    # set the x and y labels
+    plt.xlabel('Year')
+    plt.ylabel('Household Reference Person')
+    plt.xticks(year)
+
+    # show legend at top right corner
+    plt.legend(bbox_to_anchor=(1.02, 1), loc='upper left', borderaxespad=0)
+
+    canvas = FigureCanvasTkAgg(fig, master=tab8)   
+    canvas_widget = canvas.get_tk_widget()
+    canvas_widget.pack(fill=tk.BOTH, expand=True)
+
+#################################### END OF TAB 8 ############################################
+
 welcomePage(tab1)
 displayCovidGraph(tab2) 
 displayHDB(tab3)
 display_loan(tab5)
-
+displayHDBTypesByIncome(tab7)
+displayAgeOfHDBOwners(tab8)
 
 
 window.mainloop()
