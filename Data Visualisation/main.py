@@ -20,6 +20,7 @@ from PIL import Image, ImageTk
 from matplotlib.figure import Figure
 import zipfile
 import io
+import datetime
 
 
 ##################### CREATING TABS ####################################################
@@ -44,6 +45,7 @@ tab7 = ttk.Frame(notebook)
 tab8 = ttk.Frame(notebook)
 tab9 = ttk.Frame(notebook)
 tab10 = ttk.Frame(notebook)
+tab11 = ttk.Frame(notebook)
 notebook.add(tab1, text="Welcome")
 notebook.add(tab2, text="Resale Price before and after COVID-19")
 notebook.add(tab3, text="Overall View of HDBs in Singapore")   
@@ -54,6 +56,7 @@ notebook.add(tab7, text="Estimated Loan Calculator")
 notebook.add(tab8, text="BTO Sale Launch Analysis")
 notebook.add(tab9, text="HDB Unit Types By Household Income")
 notebook.add(tab10, text="Age Trends In HDB Owners")
+notebook.add(tab11, text="Remaining Years Impact on resale price")
 notebook.pack(expand=True, fill="both") #fill the entire space of the window
 
 df = None
@@ -404,16 +407,16 @@ def display_loan(tab7):
     frame = ttk.Frame(tab7)
     frame.pack(fill="both", expand=True)
     message = "Estimated HDB Loan Calculator"
-    label = customtkinter.CTkLabel(frame, text=message, font=("Arial", 25))
+    label = tk.Label(frame, text=message, font=("Arial", 25))
     label.pack(anchor="center")
 
-    income = ttk.Label(frame, text="Income:")
+    income = ttk.Label(frame, text="Income:", font=("Arial", 15))
     income.pack()
 
     incomeinput = ttk.Entry(frame)
     incomeinput.pack()
 
-    years = ttk.Label(frame, text="Loan Duration:")
+    years = ttk.Label(frame, text="Loan Duration:",  font=("Arial", 15))
     years.pack()
 
     yearsvariable = tk.StringVar()
@@ -421,9 +424,9 @@ def display_loan(tab7):
     yearsselect.pack()
 
     calculate = customtkinter.CTkButton(frame, text="Calculate", command=lambda:loancalculate(incomeinput, yearsvariable,loanresult))
-    calculate.place(relx=0.5, rely=0.90, anchor=customtkinter.CENTER)
+    calculate.place(relx=0.5, rely=0.22, anchor=customtkinter.CENTER)
 
-    loanresult = ttk.Label(frame, text="Loan Amount: ")
+    loanresult = ttk.Label(frame, text="Loan Amount: " , font=("Arial", 15))
     loanresult.pack()
     
 #################################### END OF TAB 7 ###########################################
@@ -500,7 +503,93 @@ def displayAgeOfHDBOwners(tab10):
 
 # #################################### END OF TAB 10 ############################################
 # #################################### TAB 11 ############################################
+canvas4 = None
+currentroomtype = None
 
+def exportcsv(room_type):
+    if currentroomtype is not None:  # if the global current room type is not empty
+        data = remainingYearImpactonSale(room_type)  # get its data from remainingYearsImpactonSale Function
+        filename = f"List of {room_type}.csv"  # get name of room_type user selected
+        df = pd.DataFrame(data)  # select the data that has the room_type
+        df.to_csv(filename, index=False)
+        messagebox.showinfo("Success!", "File has been exported!")
+    else:
+        messagebox.showinfo("ERROR!", "No Room Type is selected!")  # if global current room type is empty it will return a error pop up
+
+def remainingYearImpactonSale(room_type):
+    data = pd.read_csv('datasets\Resale_Flat_Prices_Jan_2013_to_Sep_2023.csv')
+
+    room_data = data[data["flat_type"] == room_type].copy()
+
+    # gets data of prices and lease commence date
+    # two_room_prices = two_room_data["resale_price"]
+    # lease_commence_date = two_room_data["lease_commence_date"]
+
+    # get the current year
+    current_year = datetime.datetime.now().year
+    # get remaining lease year by subtracting 99 - (current year - lease commence date)
+    room_data.loc[:, "remaining_years"] = 99 - (current_year - room_data["lease_commence_date"].astype(int))
+
+    if room_data.empty:
+        return None
+
+    # plot scatter plot using scatter()
+    fig, ax = plt.subplots(figsize=(10, 6))
+    ax.scatter(room_data["remaining_years"], room_data["resale_price"], alpha=0.5)
+    ax.set_title(f"{room_type} Resale Flat Prices.")
+    ax.set_xlabel("Age Left")
+    ax.set_ylabel("Resale Price")
+    ax.grid(True)
+
+    global canvas4  # declares a global canvas
+    if canvas4 is not None:  # if there is a graph displayed on the the canvas
+        canvas4.get_tk_widget().destroy()  # it will destroy before displaying another graph
+
+    canvas4 = FigureCanvasTkAgg(fig, master=tab11)
+    canvas4.get_tk_widget().pack()
+    #canvas4.draw()
+    return room_data
+
+def click_button(room_type):
+    global currentroomtype
+    currentroomtype = room_type
+    remainingYearImpactonSale(room_type)
+
+
+#tab11 = tk()
+
+# style = ttk.Style()
+# tab11.title("Remaining years of HDB(the Age) affects the resale price")
+# tab11.geometry("1080x720")
+
+room_types = ["2 ROOM", "3 ROOM", "4 ROOM", "5 ROOM", "EXECUTIVE"]
+
+# text section
+message = "Remaining years of HDB(the Age) affects the resale price"
+label = tk.Label(tab11, text=message, font=("Arial", 25))
+label.pack(anchor="center")
+
+# buttons section
+# from two,three,four,five and executive buttons, the buttons will call the function of showing the graph depending on the room type that user selected
+
+
+TWO_ROOM_BUTTON = tk.Button(tab11, text=room_types[0],padx=10, pady=5, command=lambda: click_button(room_types[0]))
+TWO_ROOM_BUTTON.place(relx=0.40, rely=0.70, anchor='center')
+
+THREE_ROOM_BUTTON = tk.Button(tab11, text=room_types[1], padx=10, pady=5, command=lambda: click_button(room_types[1]))
+THREE_ROOM_BUTTON.place(relx=0.45, rely=0.70, anchor='center')
+
+FOUR_ROOM_BUTTON = tk.Button(tab11, text=room_types[2], padx=10, pady=5,command=lambda: click_button(room_types[2]))
+FOUR_ROOM_BUTTON.place(relx=0.50, rely=0.70, anchor='center')
+
+FIVE_ROOM_BUTTON = tk.Button(tab11, text=room_types[3], padx=10, pady=5, command=lambda: click_button(room_types[3]))
+FIVE_ROOM_BUTTON.place(relx=0.55, rely=0.70, anchor='center')
+
+EXECUTIVE_ROOM_BUTTON = tk.Button(tab11, text=room_types[4], padx=10, pady=5, command=lambda: click_button(room_types[4]))
+EXECUTIVE_ROOM_BUTTON.place(relx=0.60, rely=0.70, anchor='center')
+
+EXPORT = tk.Button(tab11, text="EXPORT TO CSV", padx=10, pady=5,command=lambda: exportcsv(currentroomtype))
+EXPORT.place(relx=0.5, rely=0.75, anchor='center')
 # #################################### END OF TAB 11 ############################################
 
 # #call function for tabs
@@ -514,6 +603,7 @@ display_loan(tab7)
 # displayBTOSaleLaunchAnalysis(tab8)
 displayHDBTypesByIncome(tab9)
 displayAgeOfHDBOwners(tab10)
+remainingYearImpactonSale(tab11)
 
 
 window.mainloop()
