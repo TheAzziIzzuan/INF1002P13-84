@@ -119,7 +119,7 @@ def displayHDBinSingapore(tab3):
     canvas.pack(fill=tk.BOTH, expand=True)
 
     #Displaying the Map
-    image = Image.open("Data Visualisation\HDBinSG.png")
+    image = Image.open("Images\HDBinSG.png")
     photo = ImageTk.PhotoImage(image)
     image_label = tk.Label(canvas, image=photo)
     image_label.photo = photo  #reference to avoid garbage collection
