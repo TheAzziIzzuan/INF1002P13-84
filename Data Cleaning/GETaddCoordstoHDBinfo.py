@@ -34,5 +34,5 @@ print('Total Number of Addresses With No Coordinates',failed_count)
 df_coordinates = pd.DataFrame(coordinateslist)
 df_combined = df.join(df_coordinates)
 df_combined  = df_combined .rename(columns={0:'Latitude', 1:'Longitude'})
-df_combined.to_csv('hdb-property-information with coordinates.csv',index=False)
+df_combined.to_csv('hdb-property-coords(FULL).csv',index=False)
 
