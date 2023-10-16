@@ -9,6 +9,8 @@ from tkinter import simpledialog, messagebox, PhotoImage
 from LoanCalculator import loancalculate
 from PIL import Image, ImageTk
 from matplotlib.figure import Figure
+from BTOAnnualLaunch import annual_bto_plot  
+from price_distribution_plot import price_distribution
 
 ##################### CREATING TABS ####################################################
 
@@ -420,7 +422,19 @@ def display_loan(tab7):
 #################################### END OF TAB 7 ###########################################
 
 #################################### TAB 8 ###########################################
-# def displayBTOSaleLaunchAnalysis(tab8):
+def displayBTOSaleLaunchAnalysis(tab8):
+    # Create a frame to contain both figures
+    bto_frame = ttk.Frame(tab8)
+    bto_frame.grid(row=0, column=0, padx=10, pady=10)
+    
+    your_frame = tk.Frame(bto_frame)
+    your_frame.pack(pady=20, padx=20, fill=tk.BOTH, expand=True)
+    annual_bto_plot(your_frame)
+    
+    your_frame2 = tk.Frame(bto_frame)
+    your_frame2.pack(pady=20, padx=20, fill=tk.BOTH, expand=True)
+    price_distribution(your_frame2)
+      
 #################################### END OF TAB 8 ###########################################
 
 #################################### TAB 9 ############################################
@@ -588,7 +602,7 @@ displayAveragePrice(tab4)
 dislayPriceandAmenities(tab5)
 RentalbyFlatType() #tab6
 display_loan(tab7)
-# displayBTOSaleLaunchAnalysis(tab8)
+displayBTOSaleLaunchAnalysis(tab8)
 displayHDBTypesByIncome(tab9)
 displayAgeOfHDBOwners(tab10)
 remainingYearImpactonSale(tab11)
