@@ -182,7 +182,7 @@ def displayAveragePrice(tab4):
 
     # labels and title
     ax.set_xlabel("Town")
-    ax.set_ylabel("Average Resale Price")
+    ax.set_ylabel("Average Resale Price ($)")
     ax.set_title("Average Resale Price by Town")
     ax.tick_params(axis='x', rotation=45)  # Rotate x-axis labels if needed
 
@@ -220,7 +220,7 @@ def dislayPriceandAmenities(tab5):
     #Graph Title and Labels
     subplot1.set_title('Price of HDB Based on Distance from Nearest School')
     subplot1.set_xlabel('Distance From Nearest School')
-    subplot1.set_ylabel('Resale Price')  
+    subplot1.set_ylabel('Resale Price ($)')  
 
     # Add canvas1
     canvas1 = FigureCanvasTkAgg(figure1, master=frame1)
@@ -253,7 +253,7 @@ def dislayPriceandAmenities(tab5):
 
     subplot2.set_title('Price of HDBs based on distance from MRT (AMK area)')
     subplot2.set_xlabel('Distance From Nearest MRT Station')
-    subplot2.set_ylabel('Resale Price') 
+    subplot2.set_ylabel('Resale Price ($)') 
 
     canvas2 = FigureCanvasTkAgg(figure2, master=frame2)
     canvas2.get_tk_widget().grid(row=0, column=0, padx=10, pady=10, sticky="N")
