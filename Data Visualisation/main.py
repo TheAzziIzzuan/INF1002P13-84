@@ -57,13 +57,26 @@ def df_to_csv(data, filename_prefix):
 
 #################################### TAB 1 ####################################
 
-def welcomePage(tab1):
+def welcomePage(tab1, img_path):
     welcomeFrame = ttk.Frame(tab1)
     welcomeFrame.pack(fill=tk.BOTH, expand=True)
+    
+    # Ensure the frame updates its dimensions
+    welcomeFrame.update()
+
+    # Load the background image using Pillow
+    image = Image.open(img_path)
+    bg_image = ImageTk.PhotoImage(image)
+
+    # Set the image as background
+    bg_label = tk.Label(welcomeFrame, image=bg_image)
+    bg_label.place(x=0, y=0, relwidth=1, relheight=1)  # make label fill the entire frame
+    bg_label.image = bg_image  # keep a reference to the image object to avoid garbage collection
 
     # Create a label with a welcome message
     label = tk.Label(welcomeFrame, text="Welcome to the analysis of HDBs!", font=("Arial", 30))
     label2 = tk.Label(welcomeFrame, text="Click on the different tabs to get some insights on the different stats compiled on HDB", font=("Arial", 20))
+    
     label.pack(pady=50)  # Adjust the padding
     label2.pack(pady=30)
 
@@ -595,7 +608,7 @@ EXPORT.place(relx=0.5, rely=0.75, anchor='center')
 # #################################### END OF TAB 11 ############################################
 
 # #call function for tabs
-welcomePage(tab1)
+welcomePage(tab1, "Images\millennial-hdb-design-singapore.jpg") 
 displayCovidGraph(tab2)
 displayHDBinSingapore(tab3)
 displayAveragePrice(tab4)
