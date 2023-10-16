@@ -121,7 +121,7 @@ exportButton.pack(side=tk.BOTTOM, pady=15)                                      
 
 #################################### TAB 3 ####################################
 
-# Define a function to display HDB information in a MAP
+# Displays HDB information in a MAP
 def displayHDBinSingapore(tab3):
     canvas = tk.Canvas(tab3,width=400, height=400)
     canvas.pack(fill=tk.BOTH, expand=True)
@@ -143,6 +143,7 @@ def displayHDBinSingapore(tab3):
     def open_link(event): #function for the hyperlink
         webbrowser.open("Data Visualisation\scatter_map.html")
 
+    # Details for text below the map
     text_before_link = "To view a clearer version, click "
     hyperlink_text = "HERE"
     text_after_link = "to view the interactive map!"
@@ -159,8 +160,7 @@ def displayHDBinSingapore(tab3):
 
 #################################### TAB 4 ####################################
 
-#Line graph of average price of HDB in each town
-
+#Bar graph of average price of HDB in each town
 def extract_and_read_zipped_data(zip_path, file_name):
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         with zip_ref.open(file_name) as file:
@@ -169,29 +169,27 @@ def extract_and_read_zipped_data(zip_path, file_name):
             return df
         
 def displayAveragePrice(tab4):
+    #extracting dataset from zip file since its humongous
     zip_file_path = 'datasets\hdb_latest.zip'
     file_name = 'hdb_latest.csv'
-
-    # Extract and read the zipped data
     data = extract_and_read_zipped_data(zip_file_path, file_name)
 
 
-    # Create a frame for the tab
+    # frame for the tab
     tab_frame = ttk.Frame(tab4)
     tab_frame.pack(fill=tk.BOTH, expand=True)
 
-    # Create a canvas to display the plot on the left side
+    # Canvas to display the plot on the left side
     canvas = FigureCanvasTkAgg(plt.Figure(figsize=(6, 4)), master=tab_frame)
     canvas_widget = canvas.get_tk_widget()
     canvas_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
-    # Calculate the average resale price for each town
+    # Calculating the average resale price for each town
     average_prices = data.groupby('town_acronym')['resale_price'].mean().reset_index()
 
-    # Create a subplot for the line graph
     ax = canvas.figure.add_subplot(111)
 
-    # Plot the average resale prices as a line graph
+    # Ploting the average resale prices
     ax.bar(average_prices['town_acronym'], average_prices['resale_price'])
 
     # labels and title
@@ -200,7 +198,7 @@ def displayAveragePrice(tab4):
     ax.set_title("Average Resale Price by Town")
     ax.tick_params(axis='x', rotation=45)  # Rotate x-axis labels if needed
 
-    # Legend 
+    # Legend (to be shown on the right hand of graph)
     label_text = "AMK - Ang Mo Kio\nBB - Bukit Batok\nBD - Bedok\nBH - Bishan\nBM - Bukit Merah\nBP - Bukit Panjang\nBT - Bukit Timah\nCCK - Choa Chu Kang\nCL - Clementi\nCT - Central Area\nGL - Geylang\nHG - Hougang\nJE - Jurong East\nJW - Jurong West\nKWN - Kallang/Whampoa\nMP - Marine Parade\nPG - Punggol\nPRC - Pasir Ris\nQT - Queenstown\nSB - Sembawang\nSGN - Serangoon\nSK - Sengkang\nTAP - Toa Payoh\nTP - Tampines\nWL - Woodlands\nYS - Yishun"
     text_label = ttk.Label(tab_frame, text=label_text, wraplength=200,background='white', font=("Helvetica", 12))  # Adjust wraplength as needed
     text_label.pack(side=tk.RIGHT, anchor=tk.N, fill=tk.BOTH, expand=True)
@@ -209,7 +207,7 @@ def displayAveragePrice(tab4):
 
 def dislayPriceandAmenities(tab5):
 
-    # Create a frame to contain both figures
+    #Frame to contain both figures
     figures_frame = ttk.Frame(tab5)
     figures_frame.grid(row=0, column=0, padx=10, pady=10)
 
