@@ -164,7 +164,7 @@ def extract_and_read_zipped_data(zip_path, file_name):
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         with zip_ref.open(file_name) as file:
             data = file.read()
-            df = pd.read_csv(io.BytesIO(data))
+            df = pd.read_csv(io.BytesIO(data),low_memory=False)
             return df
         
 def displayAveragePrice(tab4):
