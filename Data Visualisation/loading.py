@@ -1,11 +1,16 @@
+import subprocess
+import sys
+
+subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements.txt"]) # install all the required packages listed in requirement.txt
+
 from tkinter import *
 from tkinter import ttk
 from tkinter.ttk import Progressbar
-import subprocess
+
 
 root = Tk()
 root.title("Loading...")
-image = PhotoImage(file="Images/loading.png")
+image = PhotoImage(file="Images\loading.png")
 
 height = 430
 width = 530
@@ -34,7 +39,7 @@ progress = Progressbar(root, orient=HORIZONTAL, length = 400, mode='determinate'
 progress.place(x=65, y=300)
 
 def top():
-    subprocess.Popen(['python', 'Data Visualisation\main.py'])              # subprocess.popen is used to open a subprocess and execute commands and the list is the command to be executed - python tells the os to use the default python interpreter to execute main.py
+    subprocess.Popen(['python', 'main.py'])              # subprocess.popen is used to open a subprocess and execute commands and the list is the command to be executed - python tells the os to use the default python interpreter to execute main.py
     root.destroy()
 
 i = 0
@@ -44,7 +49,7 @@ def load():
     if i <= 100:                                        # 100 times, in this case 100%
         txt = "Loading..." + (str(1*i) + "%")           #display the percentage of 1*i
         progress_label.config(text=txt)                 #update the label
-        progress_label.after(600, load)                 #call the function after 600ms
+        progress_label.after(100, load)                 #call the function after 600ms
         progress['value'] = 1*i                         #update the progress bar, 1*i is the percentage
         i += 10                                         #increment i + 10                      
     else:
