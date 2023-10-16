@@ -11,6 +11,7 @@ from PIL import Image, ImageTk
 from matplotlib.figure import Figure
 from BTOAnnualLaunch import annual_bto_plot  
 from price_distribution_plot import price_distribution
+from rentalResale import rentalbyflattype, resalerentalapplications, resalepriceprogression, export_file
 
 ##################### CREATING TABS ####################################################
 
@@ -40,7 +41,7 @@ notebook.add(tab2, text="Resale Price before and after COVID-19")
 notebook.add(tab3, text="Overall View of HDBs in Singapore")   
 notebook.add(tab4, text="Average Price of HDB Flat in Area") 
 notebook.add(tab5, text="Relation of Resale Prices and Distance From Amenities")
-notebook.add(tab6, text="Rental and Resale")
+notebook.add(tab6, text="Rental/Resale")
 notebook.add(tab7, text="Estimated Loan Calculator")
 notebook.add(tab8, text="BTO Sale Launch Analysis")
 notebook.add(tab9, text="HDB Unit Types By Household Income")
@@ -276,88 +277,8 @@ def dislayPriceandAmenities(tab5):
     explanation2.grid(row=1, column=0, padx=10, pady=10, sticky="N")
     
 
-# #################################### TAB 6 ####################################
+##################################### TAB 6: RENTAL AND RESALE ####################################
 
-def RentalbyFlatType():
-    global df2
-    #read in CSV
-    df2 = pd.read_csv("datasets\RentalByFlatType.csv")
-    #plots figure with 3 rows and 4 columns with figure size of 15x15
-    fig, axes = plt.subplots(3, 4, figsize=(15, 15))
-
-    #generates each pie chart
-    for i, (idx, row) in enumerate(df2.set_index('year').iterrows()):
-        ax = axes[i // 4, i % 4]
-        row = row[row.gt(row.sum() * .01)]
-        ax.pie(row, autopct='%2.1f%%', labels=row.index, textprops={'fontsize': 8}, startangle=30)
-        ax.set_title(idx)
-
-    fig.subplots_adjust(wspace=.2)
-    fig.delaxes(axes[2,3])
-    plt.suptitle("Number of Approved Renting Out Applications by Flat Type")
-    return fig
-
-def ResaleAndRentalApplications():
-    global df2
-    #read in CSV
-    df2 = pd.read_csv("datasets\ResaleAndRentalApplications.csv")
-
-    #assign values to variables
-    resale = df2['resale'].tolist()
-    rental = df2['rental'].tolist()
-    year = df2['year'].tolist()
-
-    fig, ax = plt.subplots()
-    resaleBars = ax.barh(year, resale,label="Resale")
-    rentalBars = ax.barh(year, rental,label="Rental")
-    plt.bar_label(resaleBars,labels=resale,label_type="center")
-    plt.bar_label(rentalBars,labels=rental,label_type="center")
-
-    #visible grid lines
-    plt.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='x', alpha=0.7)
-    plt.ylabel("Years")
-    plt.xlabel("Applications Registered")
-    plt.title("Applications Registered For Resale and Rental Flats")
-    plt.yticks(year)
-    plt.legend(loc="lower right")
-    
-    return fig
-
-def ResalePriceProgression():
-    global df2
-    #read in CSV
-    df2 = pd.read_csv("datasets\Resale_Flat_Prices_Jan_2013_to_Sep_2023.csv")
-
-    #drop unwanted columns
-    df2 = df2.drop('flat_type', axis=1)
-    df2 = df2.drop('block', axis=1)
-    df2 = df2.drop('street_name', axis=1)
-    df2 = df2.drop('storey_range', axis=1)
-    df2 = df2.drop('floor_area_sqm', axis=1)
-    df2 = df2.drop('flat_model', axis=1)
-    df2 = df2.drop('lease_commence_date', axis=1)
-
-    #converts month to quarter
-    df2['month'] = pd.PeriodIndex(df2.month, freq='Q')
-    df2.set_index('month', inplace=True)
-    df2 = df2.groupby(['month','town'])['resale_price'].mean()
-    df2 = df2.unstack(level='town')
-    df2.columns.name = 'Resale Price'
-
-    ax = df2.plot()
-    ax.set_xlabel("Years by Quarter")
-    ax.set_ylabel("Resale Price ($)")
-    ax.set_ylim([300000, 1000000])
-    values = np.arange(300000, 1000000, 50000)
-    
-    plt.yticks(values)
-    plt.grid(color='#95a5a6', linestyle='--', linewidth=1, axis='x', alpha=0.7,which='both')
-    plt.title("Average Resale Price Progression of Towns from 2013 to 2023")
-    plt.legend(bbox_to_anchor=(1, 1), loc='upper left')
-    fig = plt.gcf()
-    return fig
-
-df2 = None
 canvas = None
 
 def update_canvas(plot_function):
@@ -377,28 +298,12 @@ def update_canvas(plot_function):
         canvas_widget = canvas.get_tk_widget()
         canvas_widget.pack(fill='both', expand=True)
 
-def DFtoCSV(data):
-    df2 = pd.DataFrame(data)                                                                     
-    downloads_folder = os.path.expanduser('~/Downloads')
-    csv_file_path = os.path.join(downloads_folder, 'canvas_data.csv')
-    df2.to_csv(csv_file_path, index=False)    
-
-def export_file():
-    while True:                                                                                
-        if df2 is not None:                                                                     
-            DFtoCSV(df2)
-            messagebox.showinfo("Export Successful", f"Data exported to CSV file: 'canvas_data.csv'")
-            break
-        else:
-            messagebox.showinfo("Export Unsuccessful!", "No data to export!")
-            break
-
 controls_frame = LabelFrame(tab6, text='List of Graphs', background='light grey', height=5)
-RBFTbutton = Button(controls_frame, text = 'Renting out of Applications by Flat Type', padx=10, pady=5,command=lambda: update_canvas(RentalbyFlatType))
+RBFTbutton = Button(controls_frame, text = 'Renting out of Applications by Flat Type', padx=10, pady=5,command=lambda: update_canvas(rentalbyflattype))
 RBFTbutton.pack( side = LEFT)
-RVRAbutton = Button(controls_frame, text = 'Resale vs Rental Applications Registered', padx=10, pady=5,command=lambda: update_canvas(ResaleAndRentalApplications))
+RVRAbutton = Button(controls_frame, text = 'Resale vs Rental Applications Registered', padx=10, pady=5,command=lambda: update_canvas(resalerentalapplications))
 RVRAbutton.pack( side = LEFT )
-RPPBTbutton = Button(controls_frame, text = 'Resale Price Progression by Towns', padx=10, pady=5,command=lambda: update_canvas(ResalePriceProgression))
+RPPBTbutton = Button(controls_frame, text = 'Resale Price Progression by Towns', padx=10, pady=5,command=lambda: update_canvas(resalepriceprogression))
 RPPBTbutton.pack( side = LEFT )
 exportbutton = Button(controls_frame, text = 'Export CSV', padx=10, pady=5,command=export_file)
 exportbutton.pack( side = RIGHT )
@@ -613,7 +518,7 @@ displayCovidGraph(tab2)
 displayHDBinSingapore(tab3)
 displayAveragePrice(tab4)
 dislayPriceandAmenities(tab5)
-RentalbyFlatType() #tab6
+rentalbyflattype() #tab6
 display_loan(tab7)
 displayBTOSaleLaunchAnalysis(tab8)
 displayHDBTypesByIncome(tab9)
