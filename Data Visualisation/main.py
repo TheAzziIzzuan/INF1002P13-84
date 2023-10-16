@@ -464,7 +464,7 @@ def displayHDBTypesByIncome(tab9):
     plt.bar(hdbtypes,income)
 
     # name the title for the graph
-    plt.title("HDB Units By Household Income")
+    plt.title("HDB Unit Types By Household Income")
 
     # set the x and y labels
     plt.xlabel('HDB Unit Types')
