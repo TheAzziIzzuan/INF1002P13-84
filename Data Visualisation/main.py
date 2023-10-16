@@ -138,7 +138,7 @@ def displayHDBinSingapore(tab3):
     This is the overall view of the HDBs in Singapore.
     """
     explanation_label = tk.Label(canvas, text=explanation_text, justify='center', font=("Helvetica", 16))
-    canvas.create_window(250, 470, anchor=tk.W, window=explanation_label)
+    canvas.create_window(900, 470, anchor=tk.CENTER, window=explanation_label)
 
     def open_link(event): #function for the hyperlink
         webbrowser.open("Data Visualisation\scatter_map.html")
@@ -147,15 +147,15 @@ def displayHDBinSingapore(tab3):
     hyperlink_text = "HERE"
     text_after_link = "to view the interactive map!"
     hyperlink_label = tk.Label(canvas, text=text_before_link, cursor="hand2", font=("Helvetica", 12))
-    canvas.create_window(270, 510, anchor=tk.W, window=hyperlink_label) #For the sentence before hyperlink
+    canvas.create_window(680, 510, anchor=tk.W, window=hyperlink_label) #For the sentence before hyperlink
     hyperlink_label.bind("<Button-1>", open_link)
 
     hyperlink_label = tk.Label(canvas, text=hyperlink_text, cursor="hand2", fg="blue", font=("Helvetica", 12))
-    canvas.create_window(490, 510, anchor=tk.W, window=hyperlink_label) #hyperlink part
+    canvas.create_window(900, 510, anchor=tk.W, window=hyperlink_label) #hyperlink part
     hyperlink_label.bind("<Button-1>", open_link)
 
     text_label = tk.Label(canvas, text=text_after_link, font=("Helvetica", 12))
-    canvas.create_window(540, 510, anchor=tk.W, window=text_label)
+    canvas.create_window(950, 510, anchor=tk.W, window=text_label)
 
 #################################### TAB 4 ####################################
 
@@ -181,7 +181,7 @@ def displayAveragePrice(tab4):
     tab_frame.pack(fill=tk.BOTH, expand=True)
 
     # Create a canvas to display the plot on the left side
-    canvas = FigureCanvasTkAgg(plt.Figure(figsize=(4, 4)), master=tab_frame)
+    canvas = FigureCanvasTkAgg(plt.Figure(figsize=(6, 4)), master=tab_frame)
     canvas_widget = canvas.get_tk_widget()
     canvas_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
 
@@ -192,7 +192,7 @@ def displayAveragePrice(tab4):
     ax = canvas.figure.add_subplot(111)
 
     # Plot the average resale prices as a line graph
-    ax.plot(average_prices['town_acronym'], average_prices['resale_price'], marker='o', linestyle='-')
+    ax.bar(average_prices['town_acronym'], average_prices['resale_price'])
 
     # labels and title
     ax.set_xlabel("Town")
