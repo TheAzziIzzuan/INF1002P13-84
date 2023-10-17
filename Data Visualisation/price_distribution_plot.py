@@ -54,8 +54,7 @@ def draw_plot(frame, min_prices, max_prices, title, selected_rooms):
     axs[1].legend()
 
     fig.tight_layout()
-    fig.subplots_adjust(hspace=0.5)  # Adjust space between plots
-    fig.suptitle('BTO Price Analysis for Selected Room Types', y=1.02)
+    fig.subplots_adjust(hspace=0.25)  # Adjust space between plots
 
     # Render the plot on the canvas in the given frame
     canvas = FigureCanvasTkAgg(fig, master=frame)
@@ -180,8 +179,8 @@ def draw_detailed_plot(frame, min_prices, max_prices, title):
     axs[1].legend(loc="upper left")
 
     fig.tight_layout()
-    fig.subplots_adjust(hspace=0.5)
-    fig.suptitle(title, y=1.02)
+    fig.subplots_adjust(hspace=0.25)
+    
 
     # Render the plot on the canvas in the given frame
     canvas = FigureCanvasTkAgg(fig, master=frame)
