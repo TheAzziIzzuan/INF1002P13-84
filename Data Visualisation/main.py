@@ -143,7 +143,7 @@ def displayHDBinSingapore(tab3):
     canvas.create_window(900, 470, anchor=tk.CENTER, window=explanation_label)
 
     def open_link(event): #function for the hyperlink
-        webbrowser.open("Data Visualisation\scatter_map.html")
+        webbrowser.open("scatter_map.html")
 
     # Details for text below the map
     text_before_link = "To view a clearer version, click "
