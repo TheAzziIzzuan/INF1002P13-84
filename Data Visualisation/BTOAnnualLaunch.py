@@ -12,7 +12,7 @@ def annual_bto_plot(parent_frame):
     unique_launches_per_year = df[['Launch Date']].drop_duplicates()['Launch Date'].dt.year.value_counts().sort_index()
 
     # Create a figure and axis objects
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(6,4))
     
     # Modify the plotting commands to use the ax object
     ax.bar(unique_launches_per_year.index, unique_launches_per_year.values)
