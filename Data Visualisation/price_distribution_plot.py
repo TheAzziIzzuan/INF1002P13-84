@@ -35,7 +35,7 @@ def draw_plot(frame, min_prices, max_prices, title, selected_rooms):
     min_prices_per_year = filtered_df.groupby('Year')['MIN Indicative Price Range'].mean()
     max_prices_per_year = filtered_df.groupby('Year')['MAX Indicative Price Range'].mean()
 
-    fig, axs = plt.subplots(2, 1, figsize=(12,7))
+    fig, axs = plt.subplots(2, 1, figsize=(14,7))
     
     # Plot minimum prices over the years
     min_prices_per_year.plot(ax=axs[0], marker='o', color='b', label="Minimum Price")
@@ -163,7 +163,7 @@ def plot_prices_for_selected_estate_and_rooms(frame, selected_estate=None, selec
     return draw_detailed_plot(frame, min_prices_per_year, max_prices_per_year, 'BTO Price Analysis for Selected Estate and Room Types')
 
 def draw_detailed_plot(frame, min_prices, max_prices, title):
-    fig, axs = plt.subplots(2, 1, figsize=(12,7))
+    fig, axs = plt.subplots(2, 1, figsize=(14,7))
     
     min_prices.plot(ax=axs[0], marker='o')
     axs[0].set_title("Minimum BTO Prices Over the Years")
@@ -205,7 +205,7 @@ def plot_prices_by_maturity_and_roomtype(tab):
                 widget.get_tk_widget().destroy()
 
         default_maturities = df['Estate Maturity'].unique()[:3]  # Display min and max prices for the first 3 estate maturities
-        fig, axes = plt.subplots(2, 3, figsize=(12,7))
+        fig, axes = plt.subplots(2, 3, figsize=(14,7))
 
         for idx, maturity in enumerate(default_maturities):
             filtered_df = df[df['Estate Maturity'] == maturity]
