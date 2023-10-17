@@ -9,9 +9,11 @@ from tkinter import simpledialog, messagebox, PhotoImage
 from LoanCalculator import loancalculate
 from PIL import Image, ImageTk
 from matplotlib.figure import Figure
-from BTOAnnualLaunch import annual_bto_plot  
-from price_distribution_plot import price_distribution
 from rentalResale import rentalbyflattype, resalerentalapplications, resalepriceprogression, export_file
+from BTOAnnualLaunch import annual_bto_plot  
+from price_distribution_plot import plot_price_analysis, plot_prices_for_estate_and_room, plot_prices_by_maturity_and_roomtype
+from unitdistributionplot import unit_distribution
+from unitsbyroomtypeplot import plot_units_by_roomtype_each_year
 
 ##################### CREATING TABS ####################################################
 
@@ -339,17 +341,56 @@ def display_loan(tab7):
 
 #################################### TAB 8 ###########################################
 def displayBTOSaleLaunchAnalysis(tab8):
-    # Create a frame to contain both figures
-    bto_frame = ttk.Frame(tab8)
-    bto_frame.grid(row=0, column=0, padx=10, pady=10)
+    # Create a new Notebook inside tab8 for the nested tabs
+    nested_notebook = ttk.Notebook(tab8)
+    nested_notebook.grid(row=0, column=0, padx=10, pady=10, sticky='nsew')
+
+    # Create the individual tabs (frames) for the nested Notebook
+    tab1 = ttk.Frame(nested_notebook)
+    tab2 = ttk.Frame(nested_notebook)
+    tab3 = ttk.Frame(nested_notebook)
     
-    your_frame = tk.Frame(bto_frame)
-    your_frame.pack(pady=20, padx=20, fill=tk.BOTH, expand=True)
-    annual_bto_plot(your_frame)
+    # Add the new tab to the nested notebook
+    nested_notebook.add(tab1, text='Total No. of BTO Lauanch Annually')
+    nested_notebook.add(tab2, text='Price Analysis')
+    nested_notebook.add(tab3, text='Unit Analysis')
+
+    # Place your plots inside these new tabs
+    annual_bto_plot(tab1)
+
+    # Create a new Notebook for the nested tabs inside Price Analysis tab (tab2)
+    nested_notebook_price_analysis = ttk.Notebook(tab2)
+    nested_notebook_price_analysis.grid(row=0, column=0, padx=10, pady=10, sticky='nsew')
+
+    # Create the individual tabs (frames) for the nested Notebook inside Price Analysis tab
+    price_analysis_tab1 = ttk.Frame(nested_notebook_price_analysis)
+    price_analysis_tab2 = ttk.Frame(nested_notebook_price_analysis)
+    price_analysis_tab3 = ttk.Frame(nested_notebook_price_analysis)
+
+    # Add the new tabs to the nested notebook inside Price Analysis tab
+    nested_notebook_price_analysis.add(price_analysis_tab1, text='Price Analysis by Room Type')
+    nested_notebook_price_analysis.add(price_analysis_tab2, text='Price Analysis by Estate')
+    nested_notebook_price_analysis.add(price_analysis_tab3, text='Price Analysis by Estate Maturity')
+
+    # Place the corresponding plots or content inside these nested tabs
+    plot_price_analysis(price_analysis_tab1)
+    plot_prices_for_estate_and_room(price_analysis_tab2)
+    plot_prices_by_maturity_and_roomtype(price_analysis_tab3)
     
-    your_frame2 = tk.Frame(bto_frame)
-    your_frame2.pack(pady=20, padx=20, fill=tk.BOTH, expand=True)
-    price_distribution(your_frame2)
+    # Create a new Notebook for the nested tabs inside Unit Analysis tab (tab2)
+    nested_notebook_unit_analysis = ttk.Notebook(tab3)
+    nested_notebook_unit_analysis.grid(row=0, column=0, padx=10, pady=10, sticky='nsew')
+    
+    # Create the individual tabs (frames) for the nested Notebook inside Unit Analysis tab
+    unit_analysis_tab1 = ttk.Frame(nested_notebook_unit_analysis)
+    unit_analysis_tab2 = ttk.Frame(nested_notebook_unit_analysis)
+    
+    # Add the new tabs to the nested notebook inside unit Analysis tab
+    nested_notebook_unit_analysis.add(unit_analysis_tab1, text='Total No. of Units over the years')
+    nested_notebook_unit_analysis.add(unit_analysis_tab2, text='Distribution of Units by Estate & Room Type')
+    
+    plot_units_by_roomtype_each_year(unit_analysis_tab1)
+    unit_distribution(unit_analysis_tab2)
       
 #################################### END OF TAB 8 ###########################################
 
