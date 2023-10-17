@@ -49,7 +49,7 @@ def load():
     if i <= 100:                                        # 100 times, in this case 100%
         txt = "Loading..." + (str(1*i) + "%")           #display the percentage of 1*i
         progress_label.config(text=txt)                 #update the label
-        progress_label.after(100, load)                 #call the function after 600ms
+        progress_label.after(100, load)                 #call the function after 100ms
         progress['value'] = 1*i                         #update the progress bar, 1*i is the percentage
         i += 10                                         #increment i + 10                      
     else:
