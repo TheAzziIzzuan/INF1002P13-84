@@ -15,7 +15,7 @@ def plot_units_by_roomtype_each_year(frame):
     # Grouping by year and room type and then summing up units
     yearly_units_by_room = df.groupby([df['Launch Date'].dt.year, 'Room Type'])['No. of Units'].sum().unstack()
 
-    fig, ax = plt.subplots(figsize=(16, 8))
+    fig, ax = plt.subplots(figsize=(25, 8))
     yearly_units_by_room.plot(kind='bar', stacked=True, ax=ax)
 
     ax.set_title("Total Number of BTO Units Launched Each Year by Room Type")
