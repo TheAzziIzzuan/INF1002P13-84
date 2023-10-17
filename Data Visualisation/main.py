@@ -351,7 +351,7 @@ def displayBTOSaleLaunchAnalysis(tab8):
     tab3 = ttk.Frame(nested_notebook)
     
     # Add the new tab to the nested notebook
-    nested_notebook.add(tab1, text='Total No. of BTO Lauanch Annually')
+    nested_notebook.add(tab1, text='Total No. of BTO Launch Annually')
     nested_notebook.add(tab2, text='Price Analysis')
     nested_notebook.add(tab3, text='Unit Analysis')
 
