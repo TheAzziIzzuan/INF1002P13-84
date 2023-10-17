@@ -33,4 +33,4 @@ Majority of datasets were sourced from [data.gov.sg](https://data.gov.sg), conta
 - Raihah Adibah Binte Abdul Rahman
 
 ## Comments
-The loading.py will the first python file to be run as there are functions such as allowing user to automatically install the libraries and modules used in this project. Afterwards, user will but automatically be brought to the main.py which displays the graphs.
+The loading.py will the first python file to be run as there are functions such as allowing user to automatically install the libraries and modules used in this project. Afterwards, user will but automatically be brought to the main.py which displays the graphs. Before running the loading.py, ensure the file directory is \Data Visualisation
