@@ -12,7 +12,7 @@ def annual_bto_plot(parent_frame):
     unique_launches_per_year = df[['Launch Date']].drop_duplicates()['Launch Date'].dt.year.value_counts().sort_index()
 
     # Create a figure and axis objects
-    fig, ax = plt.subplots(figsize=(6,3))
+    fig, ax = plt.subplots(figsize=(8,6))
     
     # Modify the plotting commands to use the ax object
     ax.bar(unique_launches_per_year.index, unique_launches_per_year.values)
@@ -26,7 +26,7 @@ def annual_bto_plot(parent_frame):
     
     # Add a text message at the bottom of the plot with text size 20
     message = "The BTO Sale Launch is maintaining at around 4 launches per year."
-    ax.text(0.5, -0.1, message, transform=ax.transAxes, fontsize=20, ha='center')
+    ax.text(0.5, -0.15, message, transform=ax.transAxes, fontsize=20, ha='center')
     
     
     from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
