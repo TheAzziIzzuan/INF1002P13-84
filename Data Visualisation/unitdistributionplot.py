@@ -39,12 +39,11 @@ def unit_distribution(parent_frame):
     plt.close()
 
     # Calculate the top 3 estates based on "No. of Units"
-    top_3_estates = df.groupby('Estate')['No. of Units'].sum().nlargest(3).reset_index()
+    top_estates = df.groupby('Estate')['No. of Units'].sum().nlargest(3).reset_index()
 
-    # Display the top 3 estates
-    for idx, row in top_3_estates.iterrows():
-        msg = f"Estate: {row['Estate']}, No. of Units: {row['No. of Units']}"
-        label = tk.Label(parent_frame, text=msg, font=('Helvetica', 20))
-        label.pack(pady=5)
-
+    # Display the top estates with the number of units
+    top_estate_text = ", ".join([f"Top {idx + 1}: {row['Estate']} with {row['No. of Units']} units" for idx, row in top_estates.iterrows()])
+    label = tk.Label(parent_frame, text=top_estate_text, font=('Helvetica', 20))
+    label.pack(pady=5)
+    
     return fig
